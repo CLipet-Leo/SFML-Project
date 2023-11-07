@@ -36,7 +36,9 @@ void GameObject::Draw(RenderWindow& window)
 
 void GameObject::Update(float dt)
 {
-	
+	sf::Vector2f pos = shape->getPosition();
+	pos.x += 10 * dt;
+	shape->setPosition(pos);
 }
 
 

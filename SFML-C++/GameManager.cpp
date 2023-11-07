@@ -40,7 +40,7 @@ void GameManager::GameLoop()
         circle.Draw(*oWindow);
         //circle.Move(1, 10);
         rect.Draw(*oWindow);
-        rect.Rotate();
+        //rect.Rotate();
         rect.Update(deltaTime);
 
         oWindow->display();
