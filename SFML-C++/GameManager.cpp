@@ -1,4 +1,5 @@
-#include "GameManager.h"
+#include "header/GameManager.h"
+#include "header/GameObject.h"
 
 using namespace sf;
 
@@ -14,29 +15,20 @@ GameManager::~GameManager()
 
 void GameManager::GameLoop()
 {
-    //Création d'un cercle de radius 100
-    sf::CircleShape oCircle(100.f);
-    //A la position 0, 0
-    oCircle.setPosition(0.f, 0.f);
-    //Et de couleur verte
-    oCircle.setFillColor(sf::Color::Green);
+    sf::Clock deltaClock;
+    float deltaTime = deltaClock.restart().asSeconds();
 
-
-    //Création d'un rectangle de taille 50, 50
-    sf::RectangleShape oRectangle(sf::Vector2f(50.f, 50.f));
-    //A la position 100, 100
-    oCircle.setPosition(100.f, 100.f);
-    //Et de couleur rouge
-    oRectangle.setFillColor(sf::Color::Red);
-
+    GameObject circle(0.f, 0.f, Color::Green, 50.f);
+    GameObject rect(100.f, 100.f, Color::Green, 50.f, 100.f);
+    
     //GameLoop
     while (oWindow->isOpen())
     {
         //EVENT
-        sf::Event oEvent;
+        Event oEvent;
         while (oWindow->pollEvent(oEvent))
         {
-            if (oEvent.type == sf::Event::Closed)
+            if (oEvent.type == Event::Closed)
                 oWindow->close();
         }
 
@@ -45,9 +37,13 @@ void GameManager::GameLoop()
         //DRAW
         oWindow->clear();
 
-        oWindow->draw(oCircle);
-        oWindow->draw(oRectangle);
+        circle.Draw(*oWindow);
+        //circle.Move(1, 10);
+        rect.Draw(*oWindow);
+        rect.Rotate();
+        rect.Update(deltaTime);
 
         oWindow->display();
+        deltaTime = deltaClock.restart().asSeconds();
     }
 }

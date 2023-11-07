@@ -1,19 +1,29 @@
 #pragma once
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 class GameObject
 {
-	GameObject();
+public:
+	GameObject(float x, float y, sf::Color color, float r);
+
+	GameObject(float x, float y, sf::Color color, float w, float h);
+
 	~GameObject();
 
-	void Position();
+	void Draw(sf::RenderWindow& window);
 
-	void Size();
+	void Update(float dt);
 
-	void Graphic();
+	void Rotate();
+
+	void Move(int dir, int speed);
 
 protected:
-
+	sf::CircleShape* oCircle = NULL;
+	sf::RectangleShape* oRectangle = NULL;
+	sf::Shape* shape;
+	float x, y;
 };
 
