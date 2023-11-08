@@ -21,6 +21,11 @@ void GameManager::GameLoop()
     sf::Clock deltaClock;
     float deltaTime = deltaClock.restart().asSeconds();
 
+    GameObject circleGreen(100.f, 100.f, Color::Green, 100.f);
+
+    GameObject rectangleRed(50.f, 50.f, Color::Red, 50.f, 50.f);
+
+    GameObject rectangleBlue(300.f, 30.f, Color::Blue, 50.f, 50.f);
     //GameObject circle(0.f, 0.f, Color::Green, 50.f);
     GameObject rect(100.f, 100.f, Color::Green, 50.f, 100.f);
     
