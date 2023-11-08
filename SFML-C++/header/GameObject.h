@@ -18,12 +18,16 @@ public:
 
 	void Rotate(float dt);
 
+	bool Collision(GameObject block);
+
 protected:
 	sf::CircleShape* oCircle = NULL;
 	sf::RectangleShape* oRectangle = NULL;
 	sf::Shape* shape; 
 	sf::Vector2f pos;
-	float x, y, width, height;
+	float x, y;
+	float width, height;
+	float radius;
 	float rot = 0;
 };
 

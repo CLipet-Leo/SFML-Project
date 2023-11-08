@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 
 GameObject::GameObject(float x, float y, Color color, float r)
-	:x(x), y(y)
+	:x(x), y(y), radius(r)
 {
 	oCircle = new CircleShape;
 	oCircle->setRadius(r);
@@ -31,6 +31,20 @@ GameObject::GameObject(float x, float y, Color color, float w, float h)
 
 GameObject::~GameObject() 
 {}
+
+bool GameObject::Collision(GameObject object) {
+	//on assigne les position et les dimension à des variables en const Vector2f
+	const Vector2f position = shape->getPosition();
+	//if (oCircle == NULL && shape) {
+	const Vector2f size = Vector2f(width, height);
+	//}
+	/*else if (oRectangle == NULL && shape) {
+		const Vector2f sizeRed = shape->getRadius();
+	}*/
+
+	return x < object.x + object.width && x + width > object.x && y < object.y + object.height && y + height > object.y;
+
+}
 
 void GameObject::Draw(RenderWindow& window)
 {
