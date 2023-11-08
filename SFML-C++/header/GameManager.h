@@ -5,6 +5,7 @@
 class GameManager
 {
 public:
+	int screenW, screenH;
 	sf::RenderWindow* oWindow;
 
 	GameManager(int width, int height);

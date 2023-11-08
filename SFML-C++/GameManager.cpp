@@ -7,8 +7,9 @@ using namespace sf;
 using namespace std;
 
 GameManager::GameManager(int width, int height)
+    :screenW(width), screenH(height)
 {
-    oWindow = new RenderWindow(VideoMode(width, height), "SFML");
+    oWindow = new RenderWindow(VideoMode(screenW, screenH), "SFML");
 }
 
 GameManager::~GameManager()
@@ -23,6 +24,7 @@ void GameManager::GameLoop()
 
     //GameObject circle(0.f, 0.f, Color::Green, 50.f);
     GameObject rect(100.f, 100.f, Color::Green, 50.f, 100.f);
+
     
     //GameLoop
     while (oWindow->isOpen())
