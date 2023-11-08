@@ -1,6 +1,9 @@
 #include "header/GameObject.h"
 #include "header/GameManager.h"
 
+#include <iostream>
+#include <string>
+
 using namespace std;
 using namespace sf;
 
@@ -16,7 +19,7 @@ GameObject::GameObject(float x, float y, Color color, float r)
 }
 
 GameObject::GameObject(float x, float y, Color color, float w, float h)
-	:x(x), y(y)
+	:x(x), y(y), width(w), height(h)
 {
 	oRectangle = new RectangleShape;
 	oRectangle->setSize(Vector2f(w, h));
@@ -34,25 +37,19 @@ void GameObject::Draw(RenderWindow& window)
 	window.draw(*shape);
 }
 
-void GameObject::Update(float dt)
+void GameObject::Move(float dt)
 {
 	sf::Vector2f pos = shape->getPosition();
-	pos.x += 10 * dt;
+	pos.x += 100 * dt;
+	pos.y += 50 * dt;
 	shape->setPosition(pos);
 }
 
 
-void GameObject::Rotate()
+void GameObject::Rotate(float dt)
 {
-	shape->setOrigin(x, y);
-	shape->setRotation(10);
-}
-
-void GameObject::Move(int dir, int speed)
-{
-	//int vectX = x * speed * dir;
-	//int vectY = y * speed;
-
-	shape->getPosition();
-
+	shape->setOrigin(width / 2, height / 2);
+	rot = shape->getRotation();
+	rot += 100 * dt;
+	shape->setRotation(rot);
 }

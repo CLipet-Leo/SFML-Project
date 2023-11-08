@@ -14,16 +14,16 @@ public:
 
 	void Draw(sf::RenderWindow& window);
 
-	void Update(float dt);
+	void Move(float dt);
 
-	void Rotate();
-
-	void Move(int dir, int speed);
+	void Rotate(float dt);
 
 protected:
 	sf::CircleShape* oCircle = NULL;
 	sf::RectangleShape* oRectangle = NULL;
-	sf::Shape* shape;
-	float x, y;
+	sf::Shape* shape; 
+	sf::Vector2f pos;
+	float x, y, width, height;
+	float rot = 0;
 };
 

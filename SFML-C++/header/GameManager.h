@@ -12,5 +12,6 @@ public:
 
 	void GameLoop();
 
+	void detectEvent();
 };
 
