@@ -33,14 +33,8 @@ GameObject::~GameObject()
 {}
 
 bool GameObject::Collision(GameObject object) {
-	//on assigne les position et les dimension à des variables en const Vector2f
 	const Vector2f position = shape->getPosition();
-	//if (oCircle == NULL && shape) {
 	const Vector2f size = Vector2f(width, height);
-	//}
-	/*else if (oRectangle == NULL && shape) {
-		const Vector2f sizeRed = shape->getRadius();
-	}*/
 
 	return x < object.x + object.width && x + width > object.x && y < object.y + object.height && y + height > object.y;
 
@@ -51,11 +45,27 @@ void GameObject::Draw(RenderWindow& window)
 	window.draw(*shape);
 }
 
+void GameObject::DVDMove(String side) {
+	//printf("bloup\n");
+	if (side == "up") {
+		dirY = 1;
+	}
+	if (side == "down") {
+		dirY = -1;
+	}
+	if (side == "left") {
+		dirX = 1;
+	}
+	if (side == "right") {
+		dirX = -1;
+	}
+}
+
 void GameObject::Move(float dt)
 {
-	sf::Vector2f pos = shape->getPosition();
-	pos.x += 100 * dt;
-	pos.y += 50 * dt;
+	pos = shape->getPosition();
+	pos.x += (dirX * 100) * dt;
+	pos.y += (dirY * 100) * dt;
 	shape->setPosition(pos);
 }
 
