@@ -3,15 +3,16 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
 
 using namespace std;
 using namespace sf;
 
 GameObject::GameObject(float x, float y, Color color, float r)
-	:x(x), y(y)
+	:x(x), y(y), color(color), radius(r)
 {
 	oCircle = new CircleShape;
-	oCircle->setRadius(r);
+	oCircle->setRadius(radius);
 	oCircle->setPosition(x, y);
 	oCircle->setFillColor(color);
 
@@ -19,7 +20,7 @@ GameObject::GameObject(float x, float y, Color color, float r)
 }
 
 GameObject::GameObject(float x, float y, Color color, float w, float h)
-	:x(x), y(y), width(w), height(h)
+	:x(x), y(y), color(color), width(w), height(h)
 {
 	oRectangle = new RectangleShape;
 	oRectangle->setSize(Vector2f(w, h));
@@ -39,16 +40,16 @@ void GameObject::Draw(RenderWindow& window)
 
 void GameObject::Move(float dt)
 {
-	sf::Vector2f pos = shape->getPosition();
+	pos = shape->getPosition();
 	pos.x += 100 * dt;
-	pos.y += 50 * dt;
+	pos.y += 100 * dt;
 	shape->setPosition(pos);
 }
 
 
 void GameObject::Rotate(float dt)
 {
-	shape->setOrigin(width / 2, height / 2);
+	shape->setOrigin(width / 2, height);
 	rot = shape->getRotation();
 	rot += 100 * dt;
 	shape->setRotation(rot);

@@ -10,11 +10,15 @@ GameManager::GameManager(int width, int height)
     :screenW(width), screenH(height)
 {
     oWindow = new RenderWindow(VideoMode(screenW, screenH), "SFML");
+
+    mPos = new Vector2i;
 }
 
 GameManager::~GameManager()
 {
+    delete mPos;
 
+    delete oWindow;
 }
 
 void GameManager::GameLoop()
@@ -23,8 +27,7 @@ void GameManager::GameLoop()
     float deltaTime = deltaClock.restart().asSeconds();
 
     //GameObject circle(0.f, 0.f, Color::Green, 50.f);
-    GameObject rect(100.f, 100.f, Color::Green, 50.f, 100.f);
-
+    GameObject rect(screenW/2.f, screenH - 10.f, Color::Green, 30.f, 70.f);
     
     //GameLoop
     while (oWindow->isOpen())
@@ -56,15 +59,21 @@ void GameManager::detectEvent()
             oWindow->close();
         if (oEvent.type == Event::MouseMoved)
         {
-            Vector2i mPos = Mouse::getPosition();
-            //cout << mPos.x << "," << mPos.y << endl;
+            if (mPos)
+            {
+                *mPos = Mouse::getPosition();
+                cout << mPos->x << "," << mPos->y << endl;
+            }
         }
         if (Mouse::isButtonPressed(Mouse::Left))
         {
-            Vector2i clicPos = Mouse::getPosition();
-            //cout << "Clic en : " << clicPos.x << "," << clicPos.y << endl;
+            if (mPos)
+            {
+                clicPos = *mPos;
+                //cout << "Clic en : " << clicPos.x << "," << clicPos.y << endl;
+            }
         }
+
+
     }
-
-
 }

@@ -21,9 +21,10 @@ public:
 protected:
 	sf::CircleShape* oCircle = NULL;
 	sf::RectangleShape* oRectangle = NULL;
-	sf::Shape* shape; 
-	sf::Vector2f pos;
-	float x, y, width, height;
+	sf::Shape* shape = NULL; 
+	sf::Vector2f pos = {0.f, 0.f};
+	float x, y, width, height, radius;
+	sf::Color color;
 	float rot = 0;
 };
 
