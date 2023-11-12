@@ -22,11 +22,19 @@ public:
 
 	~GameObject();
 
+	void SetPosition(float fX, float fY, float fRatioX = 0.5f, float fRatioY = 0.5f);
+
+	void SetRotation(float fAngle, float fRatioX = 0.5f, float fRatioY = 0.5f);
+
 	void Draw(sf::RenderWindow& window);
+
+	void SetDirection(float fX, float fY);
 
 	void Move(float dt);
 
-	void Rotate(float dt, const sf::Vector2i& mPos);
+	void CheckCollisions(const GameObject& goOther);
+
+	void Rotate(const sf::Vector2i& mPos);
 	
 	sf::Vector2f GetOriginRelativeToWindow();
 

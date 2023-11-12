@@ -31,13 +31,26 @@ GameObject::GameObject(float x, float y, const Color& color, float w, float h)
 	shape = oRectangle;
 }
 
-GameObject::~GameObject() 
+GameObject::~GameObject()
+{
+	delete shape;
+	delete oCircle;
+	delete oRectangle;
+}
+
+void GameObject::SetPosition(float fX, float fY, float fRatioX = 0.5f, float fRatioY = 0.5f)
+{}
+
+void GameObject::SetRotation(float fAngle, float fRatioX = 0.5f, float fRatioY = 0.5f)
 {}
 
 void GameObject::Draw(RenderWindow& window)
 {
 	window.draw(*shape);
 }
+
+void GameObject::SetDirection(float fX, float fY)
+{}
 
 void GameObject::Move(float dt)
 {
@@ -47,12 +60,15 @@ void GameObject::Move(float dt)
 	shape->setPosition(pos);
 }
 
+void GameObject::CheckCollisions(const GameObject& goOther)
+{}
+
 float GetMagnitude(const sf::Vector2f& oVector)
 {
 	return sqrt((oVector.x * oVector.x) + (oVector.y * oVector.y));
 }
 
-void GameObject::Rotate(float dt, const Vector2i& oOrientationPosition)
+void GameObject::Rotate(const Vector2i& oOrientationPosition)
 {
 	sf::Vector2f oOriginPositionInWindow = GetOriginRelativeToWindow();
 
