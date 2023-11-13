@@ -21,6 +21,6 @@ void Canon::Rotate()
 
 void Canon::shoot()
 {
-	GameObject ball(50.f , 50.f , Color::Green, 50.f);
+	//GameObject ball(50.f , 50.f , Color::Green, 50.f);
 
 }

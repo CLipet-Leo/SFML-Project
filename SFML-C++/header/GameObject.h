@@ -1,26 +1,31 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <SFML/Graphics.hpp>
+
+#include "header/GameManager.h"
+#include "header/Math.h"
 
 class GameObject
 {
 public:
 	sf::CircleShape* oCircle = NULL;
 	sf::RectangleShape* oRectangle = NULL;
-	sf::Shape* shape = NULL;
-	sf::Vector2f pos = { 0.f, 0.f };
+	sf::Shape* oShape = NULL;
+	sf::Vector2f oDirection = { 0.f, 0.f };
+	sf::Vector2f oVect = { 0.f, 0.f };
 	float x, y, width, height, radius;
 	sf::Color color;
 	float rot = 0;
 
 	GameObject(float x, float y, const sf::Color& color, float r);
 
-	GameObject(float x, float y, const sf::Color& color, float w, float h);
+	GameObject(float x, float y, const sf::Color& color = sf::Color::White, float w = 50.f, float h = 50.f);
 
 	~GameObject();
 
-	void SetPosition(float fX, float fY, float fRatioX = 0.5f, float fRatioY = 0.5f);
+	void SetPosition(float fX = 0, float fY = 0, float fRatioX = 0.5f, float fRatioY = 0.5f);
 
 	void SetRotation(float fAngle, float fRatioX = 0.5f, float fRatioY = 0.5f);
 

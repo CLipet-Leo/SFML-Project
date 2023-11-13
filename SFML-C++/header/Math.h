@@ -5,10 +5,10 @@
 
 namespace Math
 {
+	float VectorToAngle(const sf::Vector2f& oVector1, const sf::Vector2f& oVector2);
 
-	float fAngleRadiant(const sf::Vector2f& oVector1, const sf::Vector2f& oVector2);
+	float VectorToNorm(const sf::Vector2f& oVector);
 
-	float fAngleDegrees(float fAngleRadian);
-
+	sf::Vector2f NormalizedVector(const sf::Vector2f& oVector);
 };
 

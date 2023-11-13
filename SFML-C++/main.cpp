@@ -1,5 +1,3 @@
-#include <SFML/Graphics.hpp>
-
 #include "header/GameManager.h"
 
 int main(int argc, char** argv)

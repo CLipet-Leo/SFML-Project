@@ -1,6 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
+#include "header/GameObject.h"
 
 class GameManager
 {
@@ -12,7 +15,7 @@ public:
 	sf::Vector2i mPos;
 	sf::Vector2i clicPos;
 
-	GameManager(int width, int height);
+	GameManager(int width = 400, int height = 400, std::string windowName = "Casse brique !");
 	~GameManager();
 
 	void GameLoop();
