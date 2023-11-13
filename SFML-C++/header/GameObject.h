@@ -11,7 +11,7 @@ public:
 	sf::RectangleShape* oRectangle = NULL;
 	sf::Shape* shape = NULL; 
 	sf::Vector2f speedVect;
-	int dirX = 1, dirY = 1;
+	int dirX = 0, dirY = 1;
 	float radius;
 	float rot = 0;
 	float x, y;
@@ -30,9 +30,13 @@ public:
 
 	void Rotate(float dt);
 	
-	bool Collision(GameObject block);
+	//bool Collision(GameObject block);
 
 	void DVDMove(sf::String side);
+
+	void collision(GameObject& object);
+
+	void changeDirection(sf::String collisionSide);
 
 };
 

@@ -9,7 +9,7 @@ using namespace std;
 GameManager::GameManager(int width, int height)
     :screenW(width), screenH(height)
 {
-    oWindow = new RenderWindow(VideoMode(screenW, screenH), "SFML");
+    oWindow = new sf::RenderWindow(sf::VideoMode(screenW, screenH), "SFML");
 }
 
 GameManager::~GameManager()
@@ -17,9 +17,10 @@ GameManager::~GameManager()
 
 }
 
-bool GameManager::Bloup(GameObject& object1, GameObject& object2) {
-    
-    return object1.x < object2.x + object2.width && object1.x + object1.width > object2.x && object1.y < object2.y + object2.height && object1.y + object1.height > object2.y;
+bool GameManager::RectOverlap(GameObject& object1, GameObject& object2)
+{
+
+    return object1.pos.x < object2.pos.x + object2.width && object1.pos.x + object1.width > object2.pos.x && object1.pos.y < object2.pos.y + object2.height && object1.pos.y + object1.height > object2.pos.y;
 }
 
 void GameManager::GameLoop()
@@ -27,50 +28,54 @@ void GameManager::GameLoop()
     sf::Clock deltaClock;
     float deltaTime = deltaClock.restart().asSeconds();
 
-    GameObject circleGreen(100.f, 100.f, Color::Green, 100.f);
+    GameObject circleGreen(100.f, 100.f, sf::Color::Green, 100.f);
 
-    GameObject rectangleRed(50.f, 50.f, Color::Red, 50.f, 50.f);
-
-    GameObject rectangleBlue(300.f, 30.f, Color::Blue, 50.f, 50.f);
-    //GameObject circle(0.f, 0.f, Color::Green, 50.f);
-    //GameObject rect(100.f, 100.f, Color::Green, 50.f, 100.f);
+    GameObject* rectangleRed = new GameObject(150.f, 150.f, sf::Color::Red, 50.f, 50.f);
+    GameObject* rectangleBlue = new GameObject(150.f, 300.f, sf::Color::Blue, 50.f, 50.f);
     
     //GameLoop
-    String side;
+    sf::String windowSide;
     while (oWindow->isOpen())
     {
         //----------------------------------------EVENT-----------------------------------------
         detectEvent();
         //----------------------------------------UPDATE----------------------------------------
 
-        if (rectangleBlue.pos.y < 0) {
-            side = "up";
-            rectangleBlue.DVDMove(side);
+        if (rectangleBlue->pos.y < 0)
+        {
+            windowSide = "up";
+            rectangleBlue->DVDMove(windowSide);
         }
-        else if (rectangleBlue.pos.y + rectangleBlue.height > screenH) {
-            side = "down";
-            rectangleBlue.DVDMove(side);
+        else if (rectangleBlue->pos.y + rectangleBlue->height > screenH)
+        {
+            windowSide = "down";
+            rectangleBlue->DVDMove(windowSide);
         }
-        if (rectangleBlue.pos.x < 0) {
-            side = "left";
-            rectangleBlue.DVDMove(side);
+        if (rectangleBlue->pos.x < 0)
+        {
+            windowSide = "left";
+            rectangleBlue->DVDMove(windowSide);
         }
-        else if (rectangleBlue.pos.x + rectangleBlue.width > screenW) {
-            side = "right";
-            rectangleBlue.DVDMove(side);
+        else if (rectangleBlue->pos.x + rectangleBlue->width > screenW)
+        {
+            windowSide = "right";
+            rectangleBlue->DVDMove(windowSide);
+        }
+
+        rectangleBlue->Move(deltaTime);
+
+        if (RectOverlap(*rectangleBlue, *rectangleRed))
+        {
+            rectangleBlue->collision(*rectangleRed);
+            //printf("bloup\n");
         }
 
 
         //----------------------------------------DRAW------------------------------------------
         oWindow->clear();
 
-        //circle.Draw(*oWindow);
-        //rect.Draw(*oWindow);
-        //rect.Rotate(deltaTime);
-        //rect.Move(deltaTime);
-        rectangleBlue.Draw(*oWindow);
-        rectangleRed.Draw(*oWindow);
-        rectangleBlue.Move(deltaTime);
+        rectangleBlue->Draw(*oWindow);
+        rectangleRed->Draw(*oWindow);
 
         oWindow->display();
         deltaTime = deltaClock.restart().asSeconds();
@@ -80,19 +85,19 @@ void GameManager::GameLoop()
 void GameManager::detectEvent()
 {
     //EVENT
-    Event oEvent;
+    sf::Event oEvent;
     while (oWindow->pollEvent(oEvent))
     {
-        if (oEvent.type == Event::Closed)
+        if (oEvent.type == sf::Event::Closed)
             oWindow->close();
-        if (oEvent.type == Event::MouseMoved)
+        if (oEvent.type == sf::Event::MouseMoved)
         {
-            Vector2i mPos = Mouse::getPosition();
+            sf::Vector2i mPos = sf::Mouse::getPosition();
             //cout << mPos.x << "," << mPos.y << endl;
         }
-        if (Mouse::isButtonPressed(Mouse::Left))
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
-            Vector2i clicPos = Mouse::getPosition();
+            sf::Vector2i clicPos = sf::Mouse::getPosition();
             //cout << "Clic en : " << clicPos.x << "," << clicPos.y << endl;
         }
     }
