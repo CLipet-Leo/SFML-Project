@@ -1,9 +1,9 @@
 #include "header/GameObject.h"
 #include "header/GameManager.h"
+#include "header/Math.h"
 
 #include <iostream>
 #include <string>
-#include <math.h>
 
 using namespace std;
 using namespace sf;
@@ -34,15 +34,20 @@ GameObject::GameObject(float x, float y, const Color& color, float w, float h)
 GameObject::~GameObject()
 {
 	delete shape;
-	delete oCircle;
-	delete oRectangle;
 }
 
-void GameObject::SetPosition(float fX, float fY, float fRatioX = 0.5f, float fRatioY = 0.5f)
-{}
+void GameObject::SetPosition(float fX, float fY, float fRatioX, float fRatioY)
+{
+	sf::Vector2f oOriginPosition = shape->getOrigin();
+	sf::Vector2f oRatioPosition = { oOriginPosition.x * fRatioX, oOriginPosition.y * fRatioY };
 
-void GameObject::SetRotation(float fAngle, float fRatioX = 0.5f, float fRatioY = 0.5f)
-{}
+	shape->setPosition(oRatioPosition.x + fX, oRatioPosition.y + fY);
+}
+
+void GameObject::SetRotation(float fAngle, float fRatioX, float fRatioY)
+{
+
+}
 
 void GameObject::Draw(RenderWindow& window)
 {
@@ -50,7 +55,9 @@ void GameObject::Draw(RenderWindow& window)
 }
 
 void GameObject::SetDirection(float fX, float fY)
-{}
+{
+
+}
 
 void GameObject::Move(float dt)
 {
@@ -61,30 +68,22 @@ void GameObject::Move(float dt)
 }
 
 void GameObject::CheckCollisions(const GameObject& goOther)
-{}
-
-float GetMagnitude(const sf::Vector2f& oVector)
 {
-	return sqrt((oVector.x * oVector.x) + (oVector.y * oVector.y));
+
 }
 
-void GameObject::Rotate(const Vector2i& oOrientationPosition)
+void GameObject::Rotate(Vector2i& oOrientationPosition)
 {
 	sf::Vector2f oOriginPositionInWindow = GetOriginRelativeToWindow();
+	sf::Vector2f fOrientationPosition = { static_cast<float>(oOrientationPosition.x), static_cast<float>(oOrientationPosition.y) };
 
-	cout << "L'origin du rect est : " << oOriginPositionInWindow.x << "," << oOriginPositionInWindow.y << endl;
-	// Calcul du vecteur entre les deux points
-	
-	float fAdjacent = (oOrientationPosition.x + 15.f) - oOriginPositionInWindow.x;
-	float fOpposit = oOrientationPosition.y - oOriginPositionInWindow.y;
+	float fAngleRadian = Math::fAngleRadiant(fOrientationPosition, oOriginPositionInWindow);
 
-	// Calcul de l'angle en radians
-	float fAngleRadian = atan2(fOpposit, fAdjacent);
-	float fAngleDegree = fAngleRadian * 180 / (atan(1) * 4);
+	float fAngleDegree = Math::fAngleDegrees(fAngleRadian);
 
-	std::cout << fAngleDegree + 90 << std::endl;
+	std::cout << fAngleDegree << std::endl;
 
-	shape->setRotation(fAngleDegree + 90 );
+	shape->setRotation(fAngleDegree);
 }
 
 sf::Vector2f GameObject::GetOriginRelativeToWindow()

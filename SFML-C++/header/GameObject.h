@@ -9,8 +9,6 @@ public:
 	sf::CircleShape* oCircle = NULL;
 	sf::RectangleShape* oRectangle = NULL;
 	sf::Shape* shape = NULL;
-	sf::Vector2f cOrigin;
-	float angleDegrees;
 	sf::Vector2f pos = { 0.f, 0.f };
 	float x, y, width, height, radius;
 	sf::Color color;
@@ -34,7 +32,7 @@ public:
 
 	void CheckCollisions(const GameObject& goOther);
 
-	void Rotate(const sf::Vector2i& mPos);
+	void Rotate(sf::Vector2i& mPos);
 	
 	sf::Vector2f GetOriginRelativeToWindow();
 

@@ -26,7 +26,6 @@ void GameManager::GameLoop()
 
     //GameObject circle(0.f, 0.f, Color::Green, 50.f);
     GameObject rect(screenW/2.f, screenH - 10.f, Color::Green, 30.f, 70.f);
-    GameObject line(screenW / 2.f, screenH / 2.f, Color::White, 5.f, screenH);
     
     //GameLoop
     while (oWindow->isOpen())
@@ -37,7 +36,7 @@ void GameManager::GameLoop()
         //UPDATE
         if (event)
         {
-            rect.Rotate(deltaTime, mPos);
+            rect.Rotate(mPos);
         }
 
         //rect.Move(deltaTime);
@@ -48,7 +47,6 @@ void GameManager::GameLoop()
 
         //circle.Draw(*oWindow);
         rect.Draw(*oWindow);
-        line.Draw(*oWindow);
 
         oWindow->display();
         
@@ -68,7 +66,7 @@ void GameManager::detectEvent()
         {
             mPos = Mouse::getPosition(*oWindow);
             event = true;
-            cout << "La position de la souris : " << mPos.x << "," << mPos.y << endl;
+            //cout << "La position de la souris : " << mPos.x << "," << mPos.y << endl;
             //cout << "Angle en degres : " << angleDegrees << endl;
         }
         if (Mouse::isButtonPressed(Mouse::Left))
