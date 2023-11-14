@@ -18,7 +18,6 @@ GameObject::GameObject(float x, float y, const sf::Color& color, float w, float 
 {
 	oRectangle = new sf::RectangleShape;
 	oRectangle->setSize(sf::Vector2f(w, h));
-
 	oRectangle->setFillColor(color);
 
 	oShape = oRectangle;

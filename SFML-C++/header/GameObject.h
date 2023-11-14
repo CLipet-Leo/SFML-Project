@@ -17,7 +17,6 @@ public:
 	sf::Vector2f oOriginVect = { 0.f, 0.f };
 	float x, y, width, height, radius;
 	sf::Color color;
-	float rot = 0;
 
 	GameObject(float x, float y, const sf::Color& color, float r);
 
@@ -37,7 +36,7 @@ public:
 
 	void SetDirection(float fX, float fY);
 
-	void Move(float dt);
+	void Move(float fDeltaTime);
 
 	void CheckCollisions(const GameObject& goOther);
 	

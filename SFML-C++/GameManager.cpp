@@ -38,8 +38,7 @@ void GameManager::GameLoop()
             rect.SetRotation(mPos, 0.5f, 1.f);
         }
         
-        if (deltaTime > 0)
-            movingRect.Move(deltaTime);
+        movingRect.Move(deltaTime);
 
         /*--------------DRAW--------------*/
         oWindow->clear();
@@ -65,7 +64,6 @@ void GameManager::detectEvent()
             mPos = sf::Mouse::getPosition(*oWindow);
             event = true;
             //cout << "La position de la souris : " << mPos.x << "," << mPos.y << endl;
-            //cout << "Angle en degres : " << angleDegrees << endl;
         }
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
