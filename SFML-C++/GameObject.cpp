@@ -1,36 +1,82 @@
 #include "header/GameObject.h"
 #include "header/GameManager.h"
 
+#include "header/Math.h"
+
 #include <iostream>
 #include <string>
 
+//using namespace sf;
 using namespace std;
-using namespace sf;
 
 GameObject::GameObject(float x, float y, sf::Color color, float r)
-	:x(x), y(y), radius(r)
+	: radius(r)
 {
-	oCircle = new sf::CircleShape;
-	oCircle->setRadius(r);
+	sf::CircleShape* oCircle = new sf::CircleShape;
+	oCircle->setRadius(radius);
 	oCircle->setPosition(x, y);
 	oCircle->setFillColor(color);
 
-	shape = oCircle;
+	oShape = oCircle;
 }
 
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
-	:x(x), y(y), width(w), height(h)
+	: width(w), height(h)
 {
-	oRectangle = new sf::RectangleShape;
+	sf::RectangleShape* oRectangle = new sf::RectangleShape;
 	oRectangle->setSize(sf::Vector2f(w, h));
-	oRectangle->setPosition(x, y);
+
 	oRectangle->setFillColor(color);
 
-	shape = oRectangle;
+	oShape = oRectangle;
+
+	SetPosition(x, y);
 }
 
 GameObject::~GameObject() 
-{}
+{
+	delete oShape;
+}
+
+void GameObject::SetPosition(float fX, float fY, float fRatioX, float fRatioY)
+{
+	SetOrigin(fRatioX, fRatioY);
+
+	oShape->setPosition(fX, fY);
+}
+
+void GameObject::SetRotation(float fAngle, float fRatioX, float fRatioY)
+{
+	SetOrigin(fRatioX, fRatioY);
+
+	oShape->setRotation(fAngle);
+}
+
+void GameObject::SetOrigin(float fRatioX, float fRatioY)
+{
+	float fOriginX = fRatioX * width;
+	float fOriginY = fRatioY * height;
+
+	oShape->setOrigin(fOriginX, fOriginY);
+}
+
+void GameObject::SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX, float fRatioY)
+{
+	SetOrigin(fRatioX, fRatioY);
+	sf::Vector2f oOriginPositionInWindow = GetOriginRelativeToWindow();
+	sf::Vector2f fOrientationPosition = { static_cast<float>(oOrientationPosition.x + (width / 2)), static_cast<float>(oOrientationPosition.y) };
+
+	float fAngleDegree = Math::VectorToAngle(fOrientationPosition, oOriginPositionInWindow);
+
+	SetRotation(fAngleDegree, fRatioX, fRatioY);
+}
+
+void GameObject::SetDirection(float fX, float fY)
+{
+	sf::Vector2f speedVect = { fX , fY };
+	oDirection = Math::NormalizedVector(speedVect);
+	cout << "Direction : " << speedVect.x << "," << speedVect.y << endl;
+}
 
 //bool GameObject::Collision(GameObject object) {
 //	const Vector2f position = shape->getPosition();
@@ -42,7 +88,7 @@ GameObject::~GameObject()
 
 void GameObject::Draw(sf::RenderWindow& window)
 {
-	window.draw(*shape);
+	window.draw(*oShape);
 }
 
 void GameObject::DVDMove(sf::String windowSide) {
@@ -61,26 +107,17 @@ void GameObject::DVDMove(sf::String windowSide) {
 	}
 }
 
-void GameObject::Move(float dt)
+void GameObject::Move(float fDeltaTime)
 {
-	pos = shape->getPosition();
-	pos.x += (dirX * 100) * dt;
-	pos.y += (dirY * 100) * dt;
-	//printf("pos: %f, %f \n", pos.x, pos.y);
-	shape->setPosition(pos);
+	oOriginVect = oShape->getPosition();
+	oOriginVect.x += (oDirection.x * 100) * fDeltaTime;
+	oOriginVect.y += (oDirection.y * 100) * fDeltaTime;
+	cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
+	SetPosition(oOriginVect.x, oOriginVect.y);
 }
 
 
-void GameObject::Rotate(float dt)
-{
-	shape->setOrigin(width / 2, height / 2);
-	rot = shape->getRotation();
-	rot += 100 * dt;
-	shape->setRotation(rot);
-}
-
-
-void GameObject::collision(GameObject& object) {
+void GameObject::CheckCollision(GameObject& object) {
 	// Most of this stuff would probably be good to keep stored inside the player
 	// along side their x and y position. That way it doesn't have to be recalculated
 	// every collision check
@@ -112,29 +149,29 @@ void GameObject::collision(GameObject& object) {
 			// Collision along the X axis. React accordingly
 			if (depthX > 0) {
 				printf("right collision\n");
-				changeDirection("right");
+				ChangeDirection("right");
 			}
 			else {
 				printf("left collision\n");
-				changeDirection("left");
+				ChangeDirection("left");
 			}
 		}
 		else {
 			// Collision along the Y axis.
 			if (depthY > 0) {
 				printf("down collision\n");
-				changeDirection("down");
+				ChangeDirection("down");
 			}
 			else {
 				printf("up collision\n");
-				changeDirection("up");
+				ChangeDirection("up");
 			}
 		}
 	}
 
 }
 
-void GameObject::changeDirection(sf::String collisionSide) {
+void GameObject::ChangeDirection(sf::String collisionSide) {
 	if (collisionSide == "down")
 	{
 		printf("bloup down\n");
@@ -152,4 +189,18 @@ void GameObject::changeDirection(sf::String collisionSide) {
 		printf("bloup right\n");
 		dirX = 1;
 	}
+}
+
+const sf::Vector2f& GameObject::GetPosition()
+{
+	return oShape->getPosition();
+}
+
+sf::Vector2f GameObject::GetOriginRelativeToWindow()
+{
+	//oShape->setOrigin(width / 2, height);
+	sf::Vector2f oWindowPosition = oShape->getPosition();
+	sf::Vector2f oOriginPosition = oShape->getOrigin();
+
+	return oWindowPosition + oOriginPosition;
 }

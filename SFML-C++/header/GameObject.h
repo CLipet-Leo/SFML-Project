@@ -6,16 +6,15 @@
 class GameObject
 {
 public:
-	sf::Vector2f pos;
-	sf::CircleShape* oCircle = NULL;
-	sf::RectangleShape* oRectangle = NULL;
-	sf::Shape* shape = NULL; 
+	sf::Shape* oShape = NULL; 
 	sf::Vector2f speedVect;
+	sf::Vector2f oDirection = { 0.f, 0.f };
+	sf::Vector2f oOriginVect = { 0.f, 0.f };
 	int dirX = 0, dirY = 1;
 	float radius;
 	float rot = 0;
-	float x, y;
 	float width, height;
+	sf::Color color;
 
 
 	GameObject(float x, float y, sf::Color color, float r);
@@ -24,19 +23,31 @@ public:
 
 	~GameObject();
 
+	void SetPosition(float fX = 0, float fY = 0, float fRatioX = 0.5f, float fRatioY = 0.5f);
+
+	void SetRotation(float fAngle, float fRatioX, float fRatioY);
+
+	void SetOrigin(float fRatioX, float fRatioY);
+
+	void SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX = 0.5f, float fRatioY = 0.5f);
+
 	void Draw(sf::RenderWindow& window);
+
+	void SetDirection(float fX, float fY);
 
 	void Move(float dt);
 
-	void Rotate(float dt);
-	
-	//bool Collision(GameObject block);
+	void CheckCollisions(const GameObject& goOther);
+
+	sf::Vector2f GetOriginRelativeToWindow();
 
 	void DVDMove(sf::String side);
 
-	void collision(GameObject& object);
+	void CheckCollision(GameObject& object);
 
-	void changeDirection(sf::String collisionSide);
+	void ChangeDirection(sf::String collisionSide);
+
+	const sf::Vector2f& GetPosition();
 
 };
 

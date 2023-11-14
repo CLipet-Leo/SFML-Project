@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-using namespace sf;
+//using namespace sf;
 using namespace std;
 
 GameManager::GameManager(int width, int height)
@@ -19,8 +19,10 @@ GameManager::~GameManager()
 
 bool GameManager::RectOverlap(GameObject& object1, GameObject& object2)
 {
+    bool IsCollidingX = object1->oShape < object2->oShape + object2.width && object1->oShape + object1.width > object2->oShape;
+    bool IsCollidingY = object1->oShape < object2->oShape + object2.height && object1->oShape + object1.height > object2->oShape;
 
-    return object1.pos.x < object2.pos.x + object2.width && object1.pos.x + object1.width > object2.pos.x && object1.pos.y < object2.pos.y + object2.height && object1.pos.y + object1.height > object2.pos.y;
+    return  IsCollidingX && IsCollidingY;
 }
 
 void GameManager::GameLoop()
@@ -40,34 +42,39 @@ void GameManager::GameLoop()
         //----------------------------------------EVENT-----------------------------------------
         detectEvent();
         //----------------------------------------UPDATE----------------------------------------
+        rectangleBlue->GetPosition();
+        rectangleRed->GetPosition();
 
-        if (rectangleBlue->pos.y < 0)
+
+        if (rectangleBlue->oShape < 0)
         {
             windowSide = "up";
             rectangleBlue->DVDMove(windowSide);
         }
-        else if (rectangleBlue->pos.y + rectangleBlue->height > screenH)
+        else if (rectangleBlue->oShape + rectangleBlue->height > screenH)
         {
             windowSide = "down";
             rectangleBlue->DVDMove(windowSide);
         }
-        if (rectangleBlue->pos.x < 0)
+        if (rectangleBlue->oShape < 0)
         {
             windowSide = "left";
             rectangleBlue->DVDMove(windowSide);
         }
-        else if (rectangleBlue->pos.x + rectangleBlue->width > screenW)
+        else if (rectangleBlue->oShape + rectangleBlue->width > screenW)
         {
             windowSide = "right";
             rectangleBlue->DVDMove(windowSide);
         }
 
         rectangleBlue->Move(deltaTime);
+        printf("Pos Blue: %f\n", rectangleBlue->oShape);
+        printf("Pos Red : %f\n", rectangleRed->oShape);
 
         if (RectOverlap(*rectangleBlue, *rectangleRed))
         {
-            rectangleBlue->collision(*rectangleRed);
-            //printf("bloup\n");
+            rectangleBlue->CheckCollision(*rectangleRed);
+            printf("bloup\n");
         }
 
 
