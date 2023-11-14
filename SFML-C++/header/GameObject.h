@@ -14,7 +14,7 @@ public:
 	sf::RectangleShape* oRectangle = NULL;
 	sf::Shape* oShape = NULL;
 	sf::Vector2f oDirection = { 0.f, 0.f };
-	sf::Vector2f oVect = { 0.f, 0.f };
+	sf::Vector2f oOriginVect = { 0.f, 0.f };
 	float x, y, width, height, radius;
 	sf::Color color;
 	float rot = 0;
@@ -27,7 +27,11 @@ public:
 
 	void SetPosition(float fX = 0, float fY = 0, float fRatioX = 0.5f, float fRatioY = 0.5f);
 
-	void SetRotation(float fAngle, float fRatioX = 0.5f, float fRatioY = 0.5f);
+	void SetRotation(float fAngle, float fRatioX, float fRatioY);
+
+	void SetOrigin(float fRatioX, float fRatioY);
+
+	void SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX = 0.5f, float fRatioY = 0.5f);
 
 	void Draw(sf::RenderWindow& window);
 
@@ -36,8 +40,6 @@ public:
 	void Move(float dt);
 
 	void CheckCollisions(const GameObject& goOther);
-
-	void Rotate(sf::Vector2i& mPos);
 	
 	sf::Vector2f GetOriginRelativeToWindow();
 

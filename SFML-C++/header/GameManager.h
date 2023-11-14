@@ -15,7 +15,7 @@ public:
 	sf::Vector2i mPos;
 	sf::Vector2i clicPos;
 
-	GameManager(int width = 400, int height = 400, std::string windowName = "Casse brique !");
+	GameManager(int width = 400, int height = 400);
 	~GameManager();
 
 	void GameLoop();

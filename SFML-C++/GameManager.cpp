@@ -2,10 +2,10 @@
 
 using namespace std;
 
-GameManager::GameManager(int width, int height, string windowName)
+GameManager::GameManager(int width, int height)
     :screenW(width), screenH(height)
 {
-    oWindow = new sf::RenderWindow(sf::VideoMode(screenW, screenH), windowName);
+    oWindow = new sf::RenderWindow(sf::VideoMode(screenW, screenH), "Casse brique !");
     oWindow->setFramerateLimit(60);
     
 }
@@ -22,10 +22,8 @@ void GameManager::GameLoop()
 
     /*--------------OBJECT CREATE--------------*/
     GameObject rect(screenW/2.f, screenH, sf::Color::Green, 30.f, 70.f);
-    rect.SetPosition(0, 0, 0.5f, 0);
 
     GameObject movingRect(screenW/2.f, screenH/2.f, sf::Color::Red);
-    movingRect.SetPosition();
     movingRect.SetDirection(1, 0);
 
     /*--------------GAMELOOP--------------*/
@@ -37,10 +35,11 @@ void GameManager::GameLoop()
         /*--------------UPDATE--------------*/
         if (event)
         {
-            rect.Rotate(mPos);
+            rect.SetRotation(mPos, 0.5f, 1.f);
         }
         
-        movingRect.Move(deltaTime);
+        if (deltaTime > 0)
+            movingRect.Move(deltaTime);
 
         /*--------------DRAW--------------*/
         oWindow->clear();

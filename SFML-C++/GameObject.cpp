@@ -18,11 +18,12 @@ GameObject::GameObject(float x, float y, const sf::Color& color, float w, float 
 {
 	oRectangle = new sf::RectangleShape;
 	oRectangle->setSize(sf::Vector2f(w, h));
-	//oRectangle->setPosition(x, y);
-	oRectangle->setOrigin(x, y);
+
 	oRectangle->setFillColor(color);
 
 	oShape = oRectangle;
+
+	SetPosition(x, y);
 }
 
 GameObject::~GameObject()
@@ -32,20 +33,35 @@ GameObject::~GameObject()
 
 void GameObject::SetPosition(float fX, float fY, float fRatioX, float fRatioY)
 {
-	sf::Vector2f oOriginPosition = oShape->getOrigin();
-	sf::Vector2f oRatioPosition = { width * fRatioX, height * fRatioY };
-	if (fX != 0 && fY != 0)
-		oShape->setPosition(oRatioPosition.x + fX , oRatioPosition.y + fY);
-	else
-	{
-		oShape->setPosition(oRatioPosition.x + oOriginPosition.x, oRatioPosition.y + oOriginPosition.y);
-		oShape->setOrigin(oRatioPosition.x + oOriginPosition.x, oRatioPosition.y + oOriginPosition.y);
-	}
+	SetOrigin(fRatioX, fRatioY);
+
+	oShape->setPosition(fX, fY);
 }
 
 void GameObject::SetRotation(float fAngle, float fRatioX, float fRatioY)
 {
+	SetOrigin(fRatioX, fRatioY);
 
+	oShape->setRotation(fAngle);
+}
+
+void GameObject::SetOrigin(float fRatioX, float fRatioY) 
+{
+	float fOriginX = fRatioX * width;
+	float fOriginY = fRatioY * height;
+
+	oShape->setOrigin(fOriginX, fOriginY);
+}
+
+void GameObject::SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX, float fRatioY)
+{
+	SetOrigin(fRatioX, fRatioY);
+	sf::Vector2f oOriginPositionInWindow = GetOriginRelativeToWindow();
+	sf::Vector2f fOrientationPosition = { static_cast<float>(oOrientationPosition.x + (width / 2)), static_cast<float>(oOrientationPosition.y) };
+
+	float fAngleDegree = Math::VectorToAngle(fOrientationPosition, oOriginPositionInWindow);
+
+	SetRotation(fAngleDegree, fRatioX, fRatioY);
 }
 
 void GameObject::Draw(sf::RenderWindow& window)
@@ -57,15 +73,16 @@ void GameObject::SetDirection(float fX, float fY)
 {
 	sf::Vector2f speedVect = { fX , fY };
 	oDirection = Math::NormalizedVector(speedVect);
-	cout << "Direction : " << speedVect.x << "," << speedVect.y;
+	cout << "Direction : " << speedVect.x << "," << speedVect.y << endl;
 }
 
 void GameObject::Move(float fDeltaTime)
 {
-	oVect = oShape->getOrigin();
-	sf::Vector2f oVectInit = { oVect.x * oDirection.x * 100 * fDeltaTime, oVect.y * oDirection.x * 100 * fDeltaTime };
-	cout << "Nouvelle pos : ", oVectInit.x, ",", oVectInit.y;
-	SetPosition(oVectInit.x, oVectInit.y);
+	oOriginVect = oShape->getPosition();
+	oOriginVect.x += (oDirection.x * 100) * fDeltaTime;
+	oOriginVect.y += (oDirection.y * 100) * fDeltaTime;
+	cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
+	SetPosition(oOriginVect.x, oOriginVect.y);
 }
 
 void GameObject::CheckCollisions(const GameObject& goOther)
@@ -73,21 +90,9 @@ void GameObject::CheckCollisions(const GameObject& goOther)
 
 }
 
-void GameObject::Rotate(sf::Vector2i& oOrientationPosition)
-{
-	sf::Vector2f oOriginPositionInWindow = GetOriginRelativeToWindow();
-	sf::Vector2f fOrientationPosition = { static_cast<float>(oOrientationPosition.x + (width/2)), static_cast<float>(oOrientationPosition.y) };
-
-	float fAngleDegree = Math::VectorToAngle(fOrientationPosition, oOriginPositionInWindow);
-
-	//std::cout << fAngleDegree << std::endl;
-
-	oShape->setRotation(fAngleDegree);
-}
-
 sf::Vector2f GameObject::GetOriginRelativeToWindow()
 {
-	oShape->setOrigin(width / 2, height);
+	//oShape->setOrigin(width / 2, height);
 	sf::Vector2f oWindowPosition = oShape->getPosition();
 	sf::Vector2f oOriginPosition = oShape->getOrigin();
 
