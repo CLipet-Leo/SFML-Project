@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <vector>
 
 namespace Math
 {
@@ -10,4 +11,5 @@ namespace Math
 	float VectorToNorm(const sf::Vector2f& oVector);
 
 	sf::Vector2f NormalizedVector(const sf::Vector2f& oVector);
+
 };

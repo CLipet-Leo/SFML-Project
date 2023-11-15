@@ -23,4 +23,6 @@ namespace Math
 		sf::Vector2f oNormalizedVector = { oVector.x / oNorm, oVector.y / oNorm };
 		return oNormalizedVector;
 	}
+
+
 }

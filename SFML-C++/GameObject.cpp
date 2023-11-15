@@ -9,6 +9,13 @@
 //using namespace sf;
 using namespace std;
 
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+//                                                                  GAME OBJECT                                                                 //
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+
+//--------------------------------------------------------------GAME OBJECT CIRCLE--------------------------------------------------------------//
 GameObject::GameObject(float x, float y, sf::Color color, float r)
 	: radius(r)
 {
@@ -20,12 +27,12 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
 	oShape = oCircle;
 }
 
+//--------------------------------------------------------------GAME OBJECT RECTANGLE-----------------------------------------------------------//
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
 	: width(w), height(h)
 {
 	sf::RectangleShape* oRectangle = new sf::RectangleShape;
 	oRectangle->setSize(sf::Vector2f(w, h));
-
 	oRectangle->setFillColor(color);
 
 	oShape = oRectangle;
@@ -33,11 +40,19 @@ GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
 	SetPosition(x, y);
 }
 
+//--------------------------------------------------------------GAME OBJECT DESTRUCTOR----------------------------------------------------------//
 GameObject::~GameObject() 
 {
 	delete oShape;
 }
 
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+//                                                                 SET ELEMENTS                                                                 //
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+
+//--------------------------------------------------------------SET POSITION--------------------------------------------------------------------//
 void GameObject::SetPosition(float fX, float fY, float fRatioX, float fRatioY)
 {
 	SetOrigin(fRatioX, fRatioY);
@@ -45,6 +60,7 @@ void GameObject::SetPosition(float fX, float fY, float fRatioX, float fRatioY)
 	oShape->setPosition(fX, fY);
 }
 
+//--------------------------------------------------------------SET ROTATION ANGLE--------------------------------------------------------------//
 void GameObject::SetRotation(float fAngle, float fRatioX, float fRatioY)
 {
 	SetOrigin(fRatioX, fRatioY);
@@ -52,6 +68,7 @@ void GameObject::SetRotation(float fAngle, float fRatioX, float fRatioY)
 	oShape->setRotation(fAngle);
 }
 
+//--------------------------------------------------------------SET ORIGIN----------------------------------------------------------------------//
 void GameObject::SetOrigin(float fRatioX, float fRatioY)
 {
 	float fOriginX = fRatioX * width;
@@ -60,6 +77,7 @@ void GameObject::SetOrigin(float fRatioX, float fRatioY)
 	oShape->setOrigin(fOriginX, fOriginY);
 }
 
+//--------------------------------------------------------------SET ROTATION VECTOR-------------------------------------------------------------//
 void GameObject::SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX, float fRatioY)
 {
 	SetOrigin(fRatioX, fRatioY);
@@ -71,72 +89,61 @@ void GameObject::SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX, 
 	SetRotation(fAngleDegree, fRatioX, fRatioY);
 }
 
+//--------------------------------------------------------------SET DIRECTION-------------------------------------------------------------------//
 void GameObject::SetDirection(float fX, float fY)
 {
 	sf::Vector2f speedVect = { fX , fY };
 	oDirection = Math::NormalizedVector(speedVect);
-	cout << "Direction : " << speedVect.x << "," << speedVect.y << endl;
+	//cout << "Direction : " << speedVect.x << "," << speedVect.y << endl;
 }
 
-//bool GameObject::Collision(GameObject object) {
-//	const Vector2f position = shape->getPosition();
-//	const Vector2f size = Vector2f(width, height);
-//
-//	return x < object.x + object.width && x + width > object.x && y < object.y + object.height && y + height > object.y;
-//
-//}
 
+
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+//                                                                    EVENTS                                                                    //
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+
+//--------------------------------------------------------------DRAW----------------------------------------------------------------------------//
 void GameObject::Draw(sf::RenderWindow& window)
 {
 	window.draw(*oShape);
 }
 
-void GameObject::DVDMove(sf::String windowSide) {
-	//printf("bloup\n");
-	if (windowSide == "up") {
-		dirY = 1;
-	}
-	if (windowSide == "down") {
-		dirY = -1;
-	}
-	if (windowSide == "left") {
-		dirX = 1;
-	}
-	if (windowSide == "right") {
-		dirX = -1;
-	}
-}
-
+//--------------------------------------------------------------MOVE----------------------------------------------------------------------------//
 void GameObject::Move(float fDeltaTime)
 {
-	oOriginVect = oShape->getPosition();
-	oOriginVect.x += (oDirection.x * 100) * fDeltaTime;
-	oOriginVect.y += (oDirection.y * 100) * fDeltaTime;
-	cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
-	SetPosition(oOriginVect.x, oOriginVect.y);
+	sf::Vector2f oPosition = GetPosition();
+	oPosition.x += (oDirection.x * 100) * fDeltaTime;
+	oPosition.y += (oDirection.y * 100) * fDeltaTime;
+	//cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
+	SetPosition(oPosition.x, oPosition.y);
 }
 
-
+//--------------------------------------------------------------CHECK COLLISION-----------------------------------------------------------------//
 void GameObject::CheckCollision(GameObject& object) {
 	// Most of this stuff would probably be good to keep stored inside the player
 	// along side their x and y position. That way it doesn't have to be recalculated
 	// every collision check
-	float playerHalfW = this->width / 2;
-	float playerHalfH = this->height / 2;
-	float enemyHalfW = object.width / 2;
-	float enemyHalfH = object.height / 2;
-	float playerCenterX = this->x + this->width / 2;
-	float playerCenterY = this->y + this->height / 2;
-	float enemyCenterX = object.x + object.width / 2;
-	float enemyCenterY = object.y + object.height / 2;
+	float objectWhoColisionHalfW = this->width / 2;
+	float objectWhoColisionHalfH = this->height / 2;
+	float objectBeCollisionedHalfW = object.width / 2;
+	float objectBeCollisionedHalfH = object.height / 2;
+	sf::Vector2f positionVectW = GetPosition();
+	sf::Vector2f positionVectB = object.GetPosition();
+	float objectWhoColisionCenterX = positionVectW.x;
+	float objectWhoColisionCenterY = positionVectW.y;
+	float objectBeCollisionedCenterX = positionVectB.x;
+	float objectBeCollisionedCenterY = positionVectB.y;
 
 	// Calculate the distance between centers
-	float diffX = playerCenterX - enemyCenterX;
-	float diffY = playerCenterY - enemyCenterY;
+	float diffX = objectWhoColisionCenterX - objectBeCollisionedCenterX;
+	float diffY = objectWhoColisionCenterY - objectBeCollisionedCenterY;
+	printf("diffX: %f, diffY: %f\n", diffX, diffY);
 
 	// Calculate the minimum distance to separate along X and Y
-	float minXDist = playerHalfW + enemyHalfW;
-	float minYDist = playerHalfH + enemyHalfH;
+	float minXDist = objectWhoColisionHalfW + objectBeCollisionedHalfW;
+	float minYDist = objectWhoColisionHalfH + objectBeCollisionedHalfH;
+	printf("minXDist: %f, minYDist: %f\n", minXDist, minYDist);
 
 	// Calculate the depth of collision for both the X and Y axis
 	float depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
@@ -144,58 +151,62 @@ void GameObject::CheckCollision(GameObject& object) {
 
 	// Now that you have the depth, you can pick the smaller depth and move
 	// along that axis.
+	printf("depthX: %f, depthY: %f\n", depthX, depthY);
 	if (depthX != 0 && depthY != 0) {
 		if (abs(depthX) < abs(depthY)) {
 			// Collision along the X axis. React accordingly
 			if (depthX > 0) {
-				printf("right collision\n");
-				ChangeDirection("right");
+				//go to right
+				this->SetDirection(1, 0);
 			}
 			else {
-				printf("left collision\n");
-				ChangeDirection("left");
+				//go to left
+				this->SetDirection(-1, 0);
 			}
 		}
 		else {
 			// Collision along the Y axis.
 			if (depthY > 0) {
-				printf("down collision\n");
-				ChangeDirection("down");
+				//go to down
+				this->SetDirection(0, 1);
 			}
 			else {
-				printf("up collision\n");
-				ChangeDirection("up");
+				//go to up
+				this->SetDirection(0, -1);
 			}
 		}
 	}
 
 }
 
-void GameObject::ChangeDirection(sf::String collisionSide) {
-	if (collisionSide == "down")
-	{
-		printf("bloup down\n");
-		dirY = 1;
-	}if (collisionSide == "up")
-	{
-		printf("bloup up\n");
-		dirY = -1;
-	}if (collisionSide == "left")
-	{
-		printf("bloup left\n");
-		dirX = -1;
-	}if (collisionSide == "right")
-	{
-		printf("bloup right\n");
-		dirX = 1;
-	}
-}
 
-const sf::Vector2f& GameObject::GetPosition()
+
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+//                                                                 GET ELEMENTS                                                                 //
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+
+//--------------------------------------------------------------GET POSITION--------------------------------------------------------------------//
+const sf::Vector2f& GameObject::GetPosition(float fRatioX, float fRatioY)
 {
-	return oShape->getPosition();
+	sf::Vector2f oOrigin = oShape->getOrigin();
+	sf::Vector2f oPosition = oShape->getPosition();
+
+	oPosition.x -= oOrigin.x;
+	oPosition.y -= oOrigin.y;
+
+	oPosition.x += fRatioX * width;
+	oPosition.y += fRatioY * height;
+
+	return oPosition;
 }
 
+//--------------------------------------------------------------GET ORIGIN----------------------------------------------------------------------//
+const sf::Vector2f& GameObject::GetOrigin()
+{
+	return oShape->getOrigin();
+}
+
+//--------------------------------------------------------------GET ORIGIN RELATIVE TO WINDOW---------------------------------------------------//
 sf::Vector2f GameObject::GetOriginRelativeToWindow()
 {
 	//oShape->setOrigin(width / 2, height);

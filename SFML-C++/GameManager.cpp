@@ -19,8 +19,10 @@ GameManager::~GameManager()
 
 bool GameManager::RectOverlap(GameObject& object1, GameObject& object2)
 {
-    bool IsCollidingX = object1->oShape < object2->oShape + object2.width && object1->oShape + object1.width > object2->oShape;
-    bool IsCollidingY = object1->oShape < object2->oShape + object2.height && object1->oShape + object1.height > object2->oShape;
+    sf::Vector2f object1Position = object1.GetPosition();
+    sf::Vector2f object2Position = object2.GetPosition();
+    bool IsCollidingX = object1Position.x < object2Position.x + object2.width && object1Position.x + object1.width > object2Position.x;
+    bool IsCollidingY = object1Position.y < object2Position.y + object2.height && object1Position.y + object1.height > object2Position.y;
 
     return  IsCollidingX && IsCollidingY;
 }
@@ -30,46 +32,59 @@ void GameManager::GameLoop()
     sf::Clock deltaClock;
     float deltaTime = deltaClock.restart().asSeconds();
 
+
+    //----------------------------------------OBJECT CREATION-----------------------------------------//
     GameObject circleGreen(100.f, 100.f, sf::Color::Green, 100.f);
 
     GameObject* rectangleRed = new GameObject(150.f, 150.f, sf::Color::Red, 50.f, 50.f);
-    GameObject* rectangleBlue = new GameObject(150.f, 300.f, sf::Color::Blue, 50.f, 50.f);
+    GameObject* rectangleBlue = new GameObject(300.f, 150.f, sf::Color::Blue, 50.f, 50.f);
+    rectangleBlue->SetDirection(1, 0);
     
-    //GameLoop
+    //----------------------------------------GAME LOOP-----------------------------------------//
     sf::String windowSide;
     while (oWindow->isOpen())
     {
-        //----------------------------------------EVENT-----------------------------------------
+
+        //----------------------------------------EVENT-----------------------------------------//
         detectEvent();
-        //----------------------------------------UPDATE----------------------------------------
+
+
+        //----------------------------------------UPDATE----------------------------------------//
         rectangleBlue->GetPosition();
         rectangleRed->GetPosition();
 
 
-        if (rectangleBlue->oShape < 0)
+        sf::Vector2f oPositionMin = rectangleBlue->GetPosition(0, 0);
+        sf::Vector2f oPositionMax = rectangleBlue->GetPosition(1, 1);
+
+        //up screen collision
+        if (oPositionMin.y < 0)
         {
-            windowSide = "up";
-            rectangleBlue->DVDMove(windowSide);
+            //go down
+            rectangleBlue->SetDirection(0, 1);
         }
-        else if (rectangleBlue->oShape + rectangleBlue->height > screenH)
+        //down screen collision
+        else if (oPositionMax.y > screenH)
         {
-            windowSide = "down";
-            rectangleBlue->DVDMove(windowSide);
+            //go up
+            rectangleBlue->SetDirection(0, -1);
         }
-        if (rectangleBlue->oShape < 0)
+        //left screen collision
+        if (oPositionMin.x < 0)
         {
-            windowSide = "left";
-            rectangleBlue->DVDMove(windowSide);
+            //go right
+            rectangleBlue->SetDirection(1, 0);
         }
-        else if (rectangleBlue->oShape + rectangleBlue->width > screenW)
+        //right screen collision
+        else if (oPositionMax.x > screenW)
         {
-            windowSide = "right";
-            rectangleBlue->DVDMove(windowSide);
+            //go left
+            rectangleBlue->SetDirection(-1, 0);
         }
 
         rectangleBlue->Move(deltaTime);
-        printf("Pos Blue: %f\n", rectangleBlue->oShape);
-        printf("Pos Red : %f\n", rectangleRed->oShape);
+        //printf("Pos Blue: %f\n", rectangleBlue->oShape);
+        //printf("Pos Red : %f\n", rectangleRed->oShape);
 
         if (RectOverlap(*rectangleBlue, *rectangleRed))
         {
@@ -78,7 +93,7 @@ void GameManager::GameLoop()
         }
 
 
-        //----------------------------------------DRAW------------------------------------------
+        //----------------------------------------DRAW------------------------------------------//
         oWindow->clear();
 
         rectangleBlue->Draw(*oWindow);
@@ -91,7 +106,7 @@ void GameManager::GameLoop()
 
 void GameManager::detectEvent()
 {
-    //EVENT
+    //----------------------------------------EVENT-----------------------------------------//
     sf::Event oEvent;
     while (oWindow->pollEvent(oEvent))
     {
