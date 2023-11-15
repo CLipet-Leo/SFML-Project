@@ -215,3 +215,5 @@ sf::Vector2f GameObject::GetOriginRelativeToWindow()
 
 	return oWindowPosition + oOriginPosition;
 }
+
+
