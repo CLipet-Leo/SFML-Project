@@ -1,7 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <math.h>
+#include <SFML/System/Vector2.hpp>
 
 namespace Math
 {

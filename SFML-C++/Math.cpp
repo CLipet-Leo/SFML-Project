@@ -1,5 +1,7 @@
 #include "header/Math.h"
 
+#include <cmath>
+
 namespace Math
 {
 	float PI = 3.14159265358979323846;

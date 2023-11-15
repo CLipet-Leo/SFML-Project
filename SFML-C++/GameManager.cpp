@@ -21,10 +21,10 @@ void GameManager::GameLoop()
     float deltaTime = deltaClock.restart().asSeconds();
 
     /*--------------OBJECT CREATE--------------*/
-    GameObject rect(screenW/2.f, screenH, sf::Color::Green, 30.f, 70.f);
+    Canon canon(screenW / 2.f, screenH * 1.f, sf::Color::Green, 30.f, 70.f);
 
     GameObject movingRect(screenW/2.f, screenH/2.f, sf::Color::Red);
-    movingRect.SetDirection(1, 0);
+    movingRect.SetDirection(0, 1);
 
     /*--------------GAMELOOP--------------*/
     while (oWindow->isOpen())
@@ -35,7 +35,7 @@ void GameManager::GameLoop()
         /*--------------UPDATE--------------*/
         if (event)
         {
-            rect.SetRotation(mPos, 0.5f, 1.f);
+            canon.SetRotation(mPos, 0.5f, 1.f);
         }
         
         movingRect.Move(deltaTime);
@@ -43,7 +43,7 @@ void GameManager::GameLoop()
         /*--------------DRAW--------------*/
         oWindow->clear();
 
-        rect.Draw(*oWindow);
+        canon.Draw(*oWindow);
         movingRect.Draw(*oWindow);
 
         oWindow->display();

@@ -1,11 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <string>
 #include <SFML/Graphics.hpp>
-
-#include "header/GameManager.h"
-#include "header/Math.h"
 
 class GameObject
 {

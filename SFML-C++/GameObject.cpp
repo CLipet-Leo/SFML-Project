@@ -1,5 +1,9 @@
 #include "header/GameObject.h"
 
+#include "header/Math.h"
+
+#include <iostream>
+
 using namespace std;
 
 GameObject::GameObject(float x, float y, const sf::Color& color, float r)
@@ -91,7 +95,6 @@ void GameObject::CheckCollisions(const GameObject& goOther)
 
 sf::Vector2f GameObject::GetOriginRelativeToWindow()
 {
-	//oShape->setOrigin(width / 2, height);
 	sf::Vector2f oWindowPosition = oShape->getPosition();
 	sf::Vector2f oOriginPosition = oShape->getOrigin();
 

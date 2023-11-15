@@ -1,26 +1,25 @@
 #include "header/Canon.h"
 
-using namespace sf;
+#include "header/GameObject.h"
+#include "header/CanonBall.h"
+
+#include <iostream>
+
 using namespace std;
 
-Canon::Canon(float screenWidth, float screenHeight)
+
+Canon::Canon(float x, float y, sf::Color color, float width, float height)
 	: GameObject(x, y, color, width, height)
 {
-	GameObject canon(.5f * screenWidth, .5f * screenHeight, Color::Green, 50.f, 100.f);
-	
+	cout << "Created !!!" << endl;
 
 }
 
 Canon::~Canon()
 {}
 
-void Canon::Rotate()
+void Canon::Shoot(sf::Vector2i& oOrientationPosition, std::vector<CanonBall>* oBall)
 {
-
-}
-
-void Canon::shoot()
-{
-	//GameObject ball(50.f , 50.f , Color::Green, 50.f);
+	oBall->push_back(CanonBall(oOrientationPosition.x, oOrientationPosition.y, sf::Color::Red, 30.f));
 
 }

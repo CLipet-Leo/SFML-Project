@@ -1,19 +1,16 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
-
-#include "header/GameObject.h"
+#include "GameObject.h"
+#include "CanonBall.h"
 
 class Canon : public GameObject
 {
 public:
-	Canon(float screenWidth, float screenHeight);
+	Canon(float x, float y, sf::Color color, float width, float height);
 	~Canon();
 
-	void Rotate();
-
-	void shoot();
+	void Shoot(sf::Vector2i& oOrientationPosition, std::vector<CanonBall>* oBall);
 
 protected:
 	//Vector2i* mouseVect = NULL;
