@@ -15,29 +15,35 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Math.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
+    <ClCompile Include="Brick.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Canon.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="CanonBall.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
     <ClCompile Include="Math.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\Brick.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
     <ClInclude Include="header\Canon.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>

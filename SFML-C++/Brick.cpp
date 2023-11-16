@@ -1,6 +1,8 @@
 #include "header/Brick.h"
-#include "header/GameObject.h"
+
+#include <SFML/Graphics.hpp>
 #include <iostream>
+#include "header/GameObject.h"
 
 using namespace std;
 
@@ -15,17 +17,17 @@ Brick::Brick(float x, float y, sf::Color color, float width, float height)
 Brick::~Brick()
 {}
 
-void GameObject::OnCollisionEnter(float depthX, float depthY)
+void Brick::OnCollisionEnter(float depthX, float depthY)
 {
-	~Brick();
+	//~Brick();
 }
 
-void GameObject::OnCollisionStay()
+void Brick::OnCollisionStay()
 {
 
 }
 
-void GameObject::OnCollisionExit()
+void Brick::OnCollisionExit()
 {
 
 }
