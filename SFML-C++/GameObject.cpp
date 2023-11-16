@@ -1,27 +1,25 @@
 #include "header/GameObject.h"
-#include "header/GameManager.h"
+
+#include "header/Math.h"
 
 #include "header/Math.h"
 
 #include <iostream>
-#include <string>
+#include "header/CanonBall.h"
 
 //using namespace sf;
 using namespace std;
-
-
-
-
 
 //----------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                                  GAME OBJECT                                                                 //
 //----------------------------------------------------------------------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------GAME OBJECT CIRCLE--------------------------------------------------------------//
-GameObject::GameObject(float x, float y, sf::Color color, float r)
-	: radius(r)
+GameObject::GameObject(float x, float y, const sf::Color& color, float r)
+	:x(x), y(y), color(color), radius(r)
 {
-	sf::CircleShape* oCircle = new sf::CircleShape;
+	oCircle = new sf::CircleShape;
+
 	oCircle->setRadius(radius);
 	oCircle->setFillColor(color);
 
@@ -30,11 +28,10 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
 	SetPosition(x, y);
 }
 
-//--------------------------------------------------------------GAME OBJECT RECTANGLE-----------------------------------------------------------//
-GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
-	: width(w), height(h)
+GameObject::GameObject(float x, float y, const sf::Color& color, float w, float h)
+	:x(x), y(y), color(color), width(w), height(h)
 {
-	sf::RectangleShape* oRectangle = new sf::RectangleShape;
+	oRectangle = new sf::RectangleShape;
 	oRectangle->setSize(sf::Vector2f(w, h));
 	oRectangle->setFillColor(color);
 
@@ -44,15 +41,10 @@ GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
 }
 
 //--------------------------------------------------------------GAME OBJECT DESTRUCTOR----------------------------------------------------------//
-GameObject::~GameObject() 
+GameObject::~GameObject()
 {
 	delete oShape;
 }
-
-
-
-
-
 
 //----------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                                 SET ELEMENTS                                                                 //
@@ -103,11 +95,6 @@ void GameObject::SetDirection(float fX, float fY)
 	//cout << "Direction : " << speedVect.x << "," << speedVect.y << endl;
 }
 
-
-
-
-
-
 //----------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                                 GET ELEMENTS                                                                 //
 //----------------------------------------------------------------------------------------------------------------------------------------------//
@@ -127,6 +114,12 @@ const sf::Vector2f& GameObject::GetPosition(float fRatioX, float fRatioY)
 	return oPosition;
 }
 
+//--------------------------------------------------------------GET DIRECTION--------------------------------------------------------------------//
+const sf::Vector2f GameObject::GetDirection()
+{
+	return oDirection;
+}
+
 //--------------------------------------------------------------GET ORIGIN----------------------------------------------------------------------//
 const sf::Vector2f& GameObject::GetOrigin()
 {
@@ -142,11 +135,6 @@ sf::Vector2f GameObject::GetOriginRelativeToWindow()
 
 	return oWindowPosition + oOriginPosition;
 }
-
-
-
-
-
 
 //----------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                                    EVENTS                                                                    //
@@ -242,7 +230,7 @@ void GameObject::CheckCollision(GameObject* object) {
 //--------------------------------------------------------------ON COLLISION ENTER--------------------------------------------------------------//
 void GameObject::OnCollisionEnter(float depthX, float depthY)
 {
-	
+  
 }
 
 //--------------------------------------------------------------ON COLLISION STAY---------------------------------------------------------------//
@@ -256,6 +244,3 @@ void GameObject::OnCollisionExit()
 {
 
 }
-
-
-
