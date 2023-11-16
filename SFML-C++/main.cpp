@@ -1,7 +1,4 @@
-#include <SFML/Graphics.hpp>
-
 #include "header/GameManager.h"
-#include "header/GameObject.h"
 
 int main(int argc, char** argv)
 {

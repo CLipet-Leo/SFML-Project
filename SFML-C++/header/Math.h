@@ -1,8 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <math.h>
-#include <vector>
+#include <SFML/System/Vector2.hpp>
 
 namespace Math
 {
@@ -13,5 +11,4 @@ namespace Math
 	float VectorToNorm(const sf::Vector2f& oVector);
 
 	sf::Vector2f NormalizedVector(const sf::Vector2f& oVector);
-
 };

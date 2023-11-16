@@ -1,5 +1,7 @@
 #include "header/Math.h"
 
+#include <cmath>
+
 namespace Math
 {
 	float PI = 3.14159265358979323846;
@@ -9,7 +11,6 @@ namespace Math
 		sf::Vector2f oVectDirection = { (oVector2.x - oVector1.x), (oVector2.y - oVector1.y) };
 		return oVectDirection;
 	}
-
 
 	float Math::VectorToAngle(const sf::Vector2f& oVector1, const sf::Vector2f& oVector2)
 	{
@@ -27,9 +28,8 @@ namespace Math
 	sf::Vector2f Math::NormalizedVector(const sf::Vector2f& oVector)
 	{
 		float oNorm = VectorToNorm(oVector);
-		sf::Vector2f oNormalizedVector = { oVector.x / oNorm, oVector.y / oNorm };
+		sf::Vector2f oNormalizedVector = { oVector.x / oNorm, oVector.y / oNorm};
 		return oNormalizedVector;
 	}
-
 
 }

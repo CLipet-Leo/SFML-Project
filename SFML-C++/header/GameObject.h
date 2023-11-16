@@ -1,26 +1,24 @@
 #pragma once
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 
 class GameObject
 {
 public:
-	sf::Shape* oShape = NULL; 
-	sf::Vector2f speedVect;
+	sf::CircleShape* oCircle = NULL;
+	sf::RectangleShape* oRectangle = NULL;
+	sf::Shape* oShape = NULL;
 	sf::Vector2f oDirection = { 0.f, 0.f };
-	float radius;
-	float rot = 0;
-	float width, height;
+	float x, y, width, height, radius;
 	sf::Color color;
 
 	std::vector<GameObject*> inCollisionWith;
 
 	//------------------------------------GAME OBJECT------------------------------------//
-	GameObject(float x, float y, sf::Color color, float r);
-	GameObject(float x, float y, sf::Color color, float w, float h);
+	GameObject(float x, float y, const sf::Color& color, float r);
+	GameObject(float x, float y, const sf::Color& color, float w, float h);
 	~GameObject();
-
+  
 	//------------------------------------SET ELEMENTS------------------------------------//
 	void SetPosition(float fX = 0, float fY = 0, float fRatioX = 0.5f, float fRatioY = 0.5f);
 	void SetRotation(float fAngle, float fRatioX, float fRatioY);
@@ -29,9 +27,10 @@ public:
 	void SetDirection(float fX, float fY);
 
 	//------------------------------------GET ELEMENTS------------------------------------//
-	sf::Vector2f GetOriginRelativeToWindow();
-	const sf::Vector2f& GetOrigin();
 	const sf::Vector2f& GetPosition(float fRatioX = 0.5f, float fRatioY = 0.5f);
+	const sf::Vector2f GetDirection();
+	const sf::Vector2f& GetOrigin();
+	sf::Vector2f GetOriginRelativeToWindow();
 
 	//---------------------------------------EVENT----------------------------------------//
 	void Draw(sf::RenderWindow& window);

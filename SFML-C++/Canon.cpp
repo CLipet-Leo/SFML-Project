@@ -21,7 +21,7 @@ Canon::~Canon()
 void Canon::Shoot(std::vector<CanonBall*>& oBall)
 {
 	sf::Vector2f oOriginVect = GetPosition();
-	cout << "Spawn d'une balle en : " << oOriginVect.x << ", " << oOriginVect.y << endl;
+	cout << "Spawn d'une balle en : " << oOriginVect.x << ", " << oOriginVect.y << endl ;
 	sf::Vector2f oDirectionVect = GetDirection();
 
 	oBall.push_back(new CanonBall(oOriginVect.x, oOriginVect.y, sf::Color::Red, 15.f, oDirectionVect));
