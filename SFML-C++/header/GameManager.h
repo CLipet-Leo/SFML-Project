@@ -22,6 +22,8 @@ public:
 	GameManager(int width = 400, int height = 400);
 	~GameManager();
 
+	bool RectOverlap(GameObject& object1, GameObject& object2);
+
 	void GameLoop();
 
 	void detectEvent();

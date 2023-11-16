@@ -12,4 +12,3 @@ namespace Math
 
 	sf::Vector2f NormalizedVector(const sf::Vector2f& oVector);
 };
-
