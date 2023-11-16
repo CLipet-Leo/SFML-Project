@@ -23,10 +23,11 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
 {
 	sf::CircleShape* oCircle = new sf::CircleShape;
 	oCircle->setRadius(radius);
-	oCircle->setPosition(x, y);
 	oCircle->setFillColor(color);
 
 	oShape = oCircle;
+
+	SetPosition(x, y);
 }
 
 //--------------------------------------------------------------GAME OBJECT RECTANGLE-----------------------------------------------------------//
@@ -241,33 +242,7 @@ void GameObject::CheckCollision(GameObject* object) {
 //--------------------------------------------------------------ON COLLISION ENTER--------------------------------------------------------------//
 void GameObject::OnCollisionEnter(float depthX, float depthY)
 {
-	if (abs(depthX) < abs(depthY))
-	{
-		// Collision along the X axis. React accordingly
-		if (depthX > 0) {
-			//go to right
-			this->SetDirection(oDirection.x * (-1), oDirection.y);
-		}
-		else
-		{
-			//go to left
-			this->SetDirection(oDirection.x * (-1), oDirection.y);
-		}
-	}
-	else
-	{
-		// Collision along the Y axis.
-		if (depthY > 0)
-		{
-			//go to down
-			this->SetDirection(oDirection.x, oDirection.y * (-1));
-		}
-		else
-		{
-			//go to up
-			this->SetDirection(oDirection.x, oDirection.y * (-1));
-		}
-	}
+	
 }
 
 //--------------------------------------------------------------ON COLLISION STAY---------------------------------------------------------------//

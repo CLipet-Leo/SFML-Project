@@ -6,6 +6,8 @@
 
 namespace Math
 {
+	sf::Vector2f DirectionBetweenPoints(const sf::Vector2f& oVector1, const sf::Vector2f& oVector2);
+
 	float VectorToAngle(const sf::Vector2f& oVector1, const sf::Vector2f& oVector2);
 
 	float VectorToNorm(const sf::Vector2f& oVector);
