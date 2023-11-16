@@ -14,6 +14,8 @@ public:
 	float width, height;
 	sf::Color color;
 
+	std::vector<GameObject*> inCollisionWith;
+
 	//------------------------------------GAME OBJECT------------------------------------//
 	GameObject(float x, float y, sf::Color color, float r);
 	GameObject(float x, float y, sf::Color color, float w, float h);
@@ -31,10 +33,13 @@ public:
 	const sf::Vector2f& GetOrigin();
 	const sf::Vector2f& GetPosition(float fRatioX = 0.5f, float fRatioY = 0.5f);
 
-	//---------------------------------------EVENT---------------------------------------//
+	//---------------------------------------EVENT----------------------------------------//
 	void Draw(sf::RenderWindow& window);
 	void Move(float dt);
-	void CheckCollision(GameObject& object);
+	void CheckCollision(GameObject* object);
+	virtual void OnCollisionEnter(float depthX, float depthY);
+	virtual void OnCollisionStay();
+	virtual void OnCollisionExit();
 
 };
 

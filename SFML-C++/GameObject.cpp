@@ -11,6 +11,8 @@ using namespace std;
 
 
 
+
+
 //----------------------------------------------------------------------------------------------------------------------------------------------//
 //                                                                  GAME OBJECT                                                                 //
 //----------------------------------------------------------------------------------------------------------------------------------------------//
@@ -45,6 +47,9 @@ GameObject::~GameObject()
 {
 	delete oShape;
 }
+
+
+
 
 
 
@@ -99,85 +104,6 @@ void GameObject::SetDirection(float fX, float fY)
 
 
 
-//----------------------------------------------------------------------------------------------------------------------------------------------//
-//                                                                    EVENTS                                                                    //
-//----------------------------------------------------------------------------------------------------------------------------------------------//
-
-//--------------------------------------------------------------DRAW----------------------------------------------------------------------------//
-void GameObject::Draw(sf::RenderWindow& window)
-{
-	window.draw(*oShape);
-}
-
-//--------------------------------------------------------------MOVE----------------------------------------------------------------------------//
-void GameObject::Move(float fDeltaTime)
-{
-	sf::Vector2f oPosition = GetPosition();
-	oPosition.x += (oDirection.x * 100) * fDeltaTime;
-	oPosition.y += (oDirection.y * 100) * fDeltaTime;
-	//cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
-	SetPosition(oPosition.x, oPosition.y);
-}
-
-//--------------------------------------------------------------CHECK COLLISION-----------------------------------------------------------------//
-void GameObject::CheckCollision(GameObject& object) {
-	// Most of this stuff would probably be good to keep stored inside the player
-	// along side their x and y position. That way it doesn't have to be recalculated
-	// every collision check
-	float objectWhoColisionHalfW = this->width / 2;
-	float objectWhoColisionHalfH = this->height / 2;
-	float objectBeCollisionedHalfW = object.width / 2;
-	float objectBeCollisionedHalfH = object.height / 2;
-	sf::Vector2f positionVectW = GetPosition();
-	sf::Vector2f positionVectB = object.GetPosition();
-	float objectWhoColisionCenterX = positionVectW.x;
-	float objectWhoColisionCenterY = positionVectW.y;
-	float objectBeCollisionedCenterX = positionVectB.x;
-	float objectBeCollisionedCenterY = positionVectB.y;
-
-	// Calculate the distance between centers
-	float diffX = objectWhoColisionCenterX - objectBeCollisionedCenterX;
-	float diffY = objectWhoColisionCenterY - objectBeCollisionedCenterY;
-	printf("diffX: %f, diffY: %f\n", diffX, diffY);
-
-	// Calculate the minimum distance to separate along X and Y
-	float minXDist = objectWhoColisionHalfW + objectBeCollisionedHalfW;
-	float minYDist = objectWhoColisionHalfH + objectBeCollisionedHalfH;
-	printf("minXDist: %f, minYDist: %f\n", minXDist, minYDist);
-
-	// Calculate the depth of collision for both the X and Y axis
-	float depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
-	float depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
-
-	// Now that you have the depth, you can pick the smaller depth and move
-	// along that axis.
-	printf("depthX: %f, depthY: %f\n", depthX, depthY);
-	if (depthX != 0 && depthY != 0) {
-		if (abs(depthX) < abs(depthY)) {
-			// Collision along the X axis. React accordingly
-			if (depthX > 0) {
-				//go to right
-				this->SetDirection(1, 0);
-			}
-			else {
-				//go to left
-				this->SetDirection(-1, 0);
-			}
-		}
-		else {
-			// Collision along the Y axis.
-			if (depthY > 0) {
-				//go to down
-				this->SetDirection(0, 1);
-			}
-			else {
-				//go to up
-				this->SetDirection(0, -1);
-			}
-		}
-	}
-
-}
 
 
 
@@ -215,5 +141,146 @@ sf::Vector2f GameObject::GetOriginRelativeToWindow()
 
 	return oWindowPosition + oOriginPosition;
 }
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+//                                                                    EVENTS                                                                    //
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+
+//--------------------------------------------------------------DRAW----------------------------------------------------------------------------//
+void GameObject::Draw(sf::RenderWindow& window)
+{
+	window.draw(*oShape);
+}
+
+//--------------------------------------------------------------MOVE----------------------------------------------------------------------------//
+void GameObject::Move(float fDeltaTime)
+{
+	sf::Vector2f oPosition = GetPosition();
+	oPosition.x += (oDirection.x * 200) * fDeltaTime;
+	oPosition.y += (oDirection.y * 200) * fDeltaTime;
+	//cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
+	SetPosition(oPosition.x, oPosition.y);
+}
+
+//--------------------------------------------------------------CHECK COLLISION-----------------------------------------------------------------//
+void GameObject::CheckCollision(GameObject* object) {
+	// Most of this stuff would probably be good to keep stored inside the player
+	// along side their x and y position. That way it doesn't have to be recalculated
+	// every collision check
+	printf("bloup\n");
+	float objectWhoCollisionHalfW = this->width / 2;
+	float objectWhoCollisionHalfH = this->height / 2;
+	float objectBeCollisionedHalfW = object->width / 2;
+	float objectBeCollisionedHalfH = object->height / 2;
+	sf::Vector2f positionVectW = GetPosition();
+	sf::Vector2f positionVectB = object->GetPosition();
+	float objectWhoCollisionCenterX = positionVectW.x;
+	float objectWhoCollisionCenterY = positionVectW.y;
+	float objectBeCollisionedCenterX = positionVectB.x;
+	float objectBeCollisionedCenterY = positionVectB.y;
+
+	// Calculate the distance between centers
+	float diffX = objectBeCollisionedCenterX - objectWhoCollisionCenterX;
+	float diffY = objectBeCollisionedCenterY - objectWhoCollisionCenterY;
+	//cout << "diff: " << diffX << "||" << diffY << endl;
+
+	// Calculate the minimum distance to separate along X and Y
+	float minXDist = objectWhoCollisionHalfW + objectBeCollisionedHalfW;
+	float minYDist = objectWhoCollisionHalfH + objectBeCollisionedHalfH;
+	//cout << "min: " << minXDist << "||" << minYDist << endl;
+
+	// Calculate the depth of collision for both the X and Y axis
+	float depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
+	float depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
+	//cout << "depth: " << depthX << "||" << depthY << endl;
+
+	// Now that you have the depth, you can pick the smaller depth and move
+	// along that axis.
+
+	bool IsCollidingX = objectWhoCollisionCenterX < objectBeCollisionedCenterX + object->width && objectWhoCollisionCenterX + this->width > objectBeCollisionedCenterX;
+    bool IsCollidingY = objectWhoCollisionCenterY < objectBeCollisionedCenterY + object->height && objectWhoCollisionCenterY + this->height > objectBeCollisionedCenterY;
+
+	bool isInCollision = IsCollidingX && IsCollidingY;
+	auto it = std::find(inCollisionWith.begin(), inCollisionWith.end(), object);
+	bool isAlreadyInCollision = it != inCollisionWith.end();
+
+	cout << isAlreadyInCollision << "||" << isInCollision << endl;
+
+
+	if (isInCollision)
+	{
+		if (isAlreadyInCollision)
+		{
+			printf("enter the stay\n");
+			OnCollisionStay();
+		}
+		else
+		{
+			printf("enter the enter\n");
+			inCollisionWith.push_back(object);	
+			OnCollisionEnter(depthX, depthY);
+		}
+	}
+	else
+	{
+		if (isAlreadyInCollision)
+		{
+			printf("enter the exit\n");
+			OnCollisionExit();
+			std::remove(inCollisionWith.begin(), inCollisionWith.end(), object);
+		}
+	}
+
+}
+
+//--------------------------------------------------------------ON COLLISION ENTER--------------------------------------------------------------//
+void GameObject::OnCollisionEnter(float depthX, float depthY)
+{
+	if (abs(depthX) < abs(depthY))
+	{
+		// Collision along the X axis. React accordingly
+		if (depthX > 0) {
+			//go to right
+			this->SetDirection(oDirection.x * (-1), oDirection.y);
+		}
+		else
+		{
+			//go to left
+			this->SetDirection(oDirection.x * (-1), oDirection.y);
+		}
+	}
+	else
+	{
+		// Collision along the Y axis.
+		if (depthY > 0)
+		{
+			//go to down
+			this->SetDirection(oDirection.x, oDirection.y * (-1));
+		}
+		else
+		{
+			//go to up
+			this->SetDirection(oDirection.x, oDirection.y * (-1));
+		}
+	}
+}
+
+//--------------------------------------------------------------ON COLLISION STAY---------------------------------------------------------------//
+void GameObject::OnCollisionStay()
+{
+
+}
+
+//--------------------------------------------------------------ON COLLISION EXIT---------------------------------------------------------------//
+void GameObject::OnCollisionExit()
+{
+
+}
+
 
 
