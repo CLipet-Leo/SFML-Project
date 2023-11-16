@@ -6,6 +6,12 @@ namespace Math
 {
 	float PI = 3.14159265358979323846;
 
+	sf::Vector2f Math::DirectionBetweenPoints(const sf::Vector2f& oVector1, const sf::Vector2f& oVector2)
+	{
+		sf::Vector2f oVectDirection = { (oVector2.x - oVector1.x), (oVector2.y - oVector1.y) };
+		return oVectDirection;
+	}
+
 	float Math::VectorToAngle(const sf::Vector2f& oVector1, const sf::Vector2f& oVector2)
 	{
 		float fAngleRadian = -atan2(oVector1.x - oVector2.x, oVector1.y - oVector2.y);

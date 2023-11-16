@@ -18,8 +18,12 @@ Canon::Canon(float x, float y, sf::Color color, float width, float height)
 Canon::~Canon()
 {}
 
-void Canon::Shoot(sf::Vector2i& oOrientationPosition, std::vector<CanonBall>* oBall)
+void Canon::Shoot(std::vector<CanonBall*>& oBall)
 {
-	oBall->push_back(CanonBall(oOrientationPosition.x, oOrientationPosition.y, sf::Color::Red, 30.f));
+	sf::Vector2f oOriginVect = GetPosition();
+	cout << "Spawn d'une balle en : " << oOriginVect.x << ", " << oOriginVect.y << endl ;
+	sf::Vector2f oDirectionVect = GetDirection();
+
+	oBall.push_back(new CanonBall(oOriginVect.x, oOriginVect.y, sf::Color::Red, 15.f, oDirectionVect));
 
 }

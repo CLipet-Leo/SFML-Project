@@ -13,9 +13,11 @@ public:
 	float x, y, width, height, radius;
 	sf::Color color;
 
+	std::vector<GameObject*> inCollisionWith;
+
 	GameObject(float x, float y, const sf::Color& color, float r);
 
-	GameObject(float x, float y, const sf::Color& color = sf::Color::White, float w = 50.f, float h = 50.f);
+	GameObject(float x, float y, const sf::Color& color, float w, float h);
 
 	~GameObject();
 
@@ -27,15 +29,19 @@ public:
 
 	void SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX = 0.5f, float fRatioY = 0.5f);
 
-	void Draw(sf::RenderWindow& window);
+	virtual void Draw(sf::RenderWindow& window);
 
 	void SetDirection(float fX, float fY);
 
 	void Move(float fDeltaTime);
 
-	void CheckCollisions(const GameObject& goOther);
+	void CheckCollisions(GameObject* goOther);
 	
-	sf::Vector2f GetOriginRelativeToWindow();
+	const sf::Vector2f GetOriginRelativeToWindow();
+
+	const sf::Vector2f GetPosition();
+
+	const sf::Vector2f GetDirection();
 
 protected:
 };

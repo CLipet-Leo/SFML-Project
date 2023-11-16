@@ -1,5 +1,9 @@
 #include "header/GameManager.h"
 
+#include "header/GameObject.h"
+#include "header/Canon.h"
+#include "header/CanonBall.h"
+
 using namespace std;
 
 GameManager::GameManager(int width, int height)
@@ -23,9 +27,6 @@ void GameManager::GameLoop()
     /*--------------OBJECT CREATE--------------*/
     Canon canon(screenW / 2.f, screenH * 1.f, sf::Color::Green, 30.f, 70.f);
 
-    GameObject movingRect(screenW/2.f, screenH/2.f, sf::Color::Red);
-    movingRect.SetDirection(0, 1);
-
     /*--------------GAMELOOP--------------*/
     while (oWindow->isOpen())
     {
@@ -33,18 +34,33 @@ void GameManager::GameLoop()
         detectEvent();
         
         /*--------------UPDATE--------------*/
-        if (event)
+        if (moveEvent)
         {
             canon.SetRotation(mPos, 0.5f, 1.f);
         }
-        
-        movingRect.Move(deltaTime);
+        if (clicEvent && oBullet.size() < 1)
+        {
+            canon.Shoot(oBullet);
+        }
+        if (oBullet.size() != 0)
+        {
+            for (int i = 0; i < oBullet.size(); i++) {
+                oBullet.at(i)->Move(deltaTime);
+            }
+        }
 
         /*--------------DRAW--------------*/
         oWindow->clear();
 
         canon.Draw(*oWindow);
-        movingRect.Draw(*oWindow);
+        if (oBullet.size() != 0)
+        {
+            for (int i = 0; i < oBullet.size(); i++) {
+                oBullet.at(i)->Draw(*oWindow);
+                /*sf::Vector2f position = oBullet.at(i)->GetPosition();
+                cout << position.x << ", " << position.y << endl;*/
+            }
+        }
 
         oWindow->display();
         
@@ -54,7 +70,9 @@ void GameManager::GameLoop()
 
 void GameManager::detectEvent()
 {
-    event = false;
+    moveEvent = false;
+    clicEvent = false;
+
     while (oWindow->pollEvent(oEvent))
     {
         if (oEvent.type == sf::Event::Closed)
@@ -62,12 +80,13 @@ void GameManager::detectEvent()
         if (oEvent.type == sf::Event::MouseMoved)
         {
             mPos = sf::Mouse::getPosition(*oWindow);
-            event = true;
+            moveEvent = true;
             //cout << "La position de la souris : " << mPos.x << "," << mPos.y << endl;
         }
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
             clicPos = mPos;
+            clicEvent = true;
             //cout << "Clic en : " << clicPos.x << "," << clicPos.y << endl;
         }
     }
