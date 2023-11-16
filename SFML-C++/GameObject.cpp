@@ -1,13 +1,10 @@
 #include "header/GameObject.h"
 
-#include "header/Math.h"
-
-#include "header/Math.h"
-
 #include <iostream>
+
+#include "header/Math.h"
 #include "header/CanonBall.h"
 
-//using namespace sf;
 using namespace std;
 
 //----------------------------------------------------------------------------------------------------------------------------------------------//
@@ -149,6 +146,7 @@ void GameObject::Draw(sf::RenderWindow& window)
 //--------------------------------------------------------------MOVE----------------------------------------------------------------------------//
 void GameObject::Move(float fDeltaTime)
 {
+
 	sf::Vector2f oPosition = GetPosition();
 	oPosition.x += (oDirection.x * 200) * fDeltaTime;
 	oPosition.y += (oDirection.y * 200) * fDeltaTime;

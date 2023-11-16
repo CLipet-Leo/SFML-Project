@@ -36,9 +36,9 @@ void GameManager::GameLoop()
     //----------------------------------------OBJECT CREATION-----------------------------------------//
     Canon canon(screenW / 2.f, screenH * 1.f, sf::Color::Green, 30.f, 70.f);
 
-    GameObject* rectangleRed = new GameObject(150.f, 150.f, sf::Color::Red, 50.f, 50.f);
+    /*GameObject* rectangleRed = new GameObject(150.f, 150.f, sf::Color::Red, 50.f, 50.f);
     GameObject* rectangleBlue = new GameObject(300.f, 150.f, sf::Color::Blue, 50.f, 50.f);
-    rectangleBlue->SetDirection(1, 1);
+    rectangleBlue->SetDirection(1, 1);*/
     
     //----------------------------------------GAME LOOP-----------------------------------------//
     sf::String windowSide;
@@ -63,40 +63,40 @@ void GameManager::GameLoop()
         }
 
         //----------------------------------------UPDATE----------------------------------------//
-        rectangleBlue->GetPosition();
-        rectangleRed->GetPosition();
+        //rectangleBlue->GetPosition();
+        //rectangleRed->GetPosition();
 
 
-        sf::Vector2f oPositionMin = rectangleBlue->GetPosition(0, 0);
-        sf::Vector2f oPositionMax = rectangleBlue->GetPosition(1, 1);
+        //sf::Vector2f oPositionMin = rectangleBlue->GetPosition(0, 0);
+        //sf::Vector2f oPositionMax = rectangleBlue->GetPosition(1, 1);
 
-        //up screen collision
-        if (oPositionMin.y < 0)
-        {
-            //go down
-            rectangleBlue->SetDirection(rectangleBlue->oDirection.x, rectangleBlue->oDirection.y * (-1));
-        }
-        //down screen collision
-        else if (oPositionMax.y > screenH)
-        {
-            //go up
-            rectangleBlue->SetDirection(rectangleBlue->oDirection.x, rectangleBlue->oDirection.y * (-1));
-        }
-        //left screen collision
-        if (oPositionMin.x < 0)
-        {
-            //go right
-            rectangleBlue->SetDirection(rectangleBlue->oDirection.x * (-1), rectangleBlue->oDirection.y);
-        }
-        //right screen collision
-        else if (oPositionMax.x > screenW)
-        {
-            //go left
-            rectangleBlue->SetDirection(rectangleBlue->oDirection.x * (-1), rectangleBlue->oDirection.y);
-        }
+        ////up screen collision
+        //if (oPositionMin.y < 0)
+        //{
+        //    //go down
+        //    rectangleBlue->SetDirection(rectangleBlue->oDirection.x, rectangleBlue->oDirection.y * (-1));
+        //}
+        ////down screen collision
+        //else if (oPositionMax.y > screenH)
+        //{
+        //    //go up
+        //    rectangleBlue->SetDirection(rectangleBlue->oDirection.x, rectangleBlue->oDirection.y * (-1));
+        //}
+        ////left screen collision
+        //if (oPositionMin.x < 0)
+        //{
+        //    //go right
+        //    rectangleBlue->SetDirection(rectangleBlue->oDirection.x * (-1), rectangleBlue->oDirection.y);
+        //}
+        ////right screen collision
+        //else if (oPositionMax.x > screenW)
+        //{
+        //    //go left
+        //    rectangleBlue->SetDirection(rectangleBlue->oDirection.x * (-1), rectangleBlue->oDirection.y);
+        //}
 
-        rectangleBlue->Move(deltaTime);
-        rectangleBlue->CheckCollision(rectangleRed);
+        //rectangleBlue->Move(deltaTime);
+        //rectangleBlue->CheckCollision(rectangleRed);
         
 
 
@@ -107,13 +107,13 @@ void GameManager::GameLoop()
         if (oBullet.size() != 0)
         {
             for (int i = 0; i < oBullet.size(); i++) {
-                oBullet.at(i)->GetPosition();
+                sf::Vector2f position = oBullet.at(i)->GetPosition();
                 oBullet.at(i)->Draw(*oWindow);
-                //cout << position.x << ", " << position.y << endl;
+                cout << position.x << ", " << position.y << endl;
             }
         }
-        rectangleBlue->Draw(*oWindow);
-        rectangleRed->Draw(*oWindow);
+        /*rectangleBlue->Draw(*oWindow);
+        rectangleRed->Draw(*oWindow);*/
 
         oWindow->display();
         
