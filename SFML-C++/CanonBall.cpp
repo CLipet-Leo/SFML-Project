@@ -13,7 +13,7 @@ CanonBall::CanonBall(float x, float y, sf::Color color, float radius, sf::Vector
 	cout << "Created ball !!!" << endl;
 }
 
-void CanonBall::Draw(sf::RenderWindow& window)
-{
-	window.draw(*oShape);
-}
+//void CanonBall::Draw(sf::RenderWindow& window)
+//{
+//	window.draw(*oShape);
+//}

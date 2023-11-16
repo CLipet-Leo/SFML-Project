@@ -56,9 +56,9 @@ void GameManager::GameLoop()
         if (oBullet.size() != 0)
         {
             for (int i = 0; i < oBullet.size(); i++) {
+                oBullet.at(i)->GetPosition();
                 oBullet.at(i)->Draw(*oWindow);
-                /*sf::Vector2f position = oBullet.at(i)->GetPosition();
-                cout << position.x << ", " << position.y << endl;*/
+                //cout << position.x << ", " << position.y << endl;
             }
         }
 
