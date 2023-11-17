@@ -8,9 +8,9 @@ public:
 	Brick(float x, float y, sf::Color color, float width, float height);
 	~Brick();
 
-	void OnCollisionEnter(float depthX, float depthY);
-	void OnCollisionStay();
-	void OnCollisionExit();
+	void OnCollisionEnter(std::string oFace) override;
+	void OnCollisionStay() override;
+	void OnCollisionExit() override;
 
 };
 

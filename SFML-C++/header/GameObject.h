@@ -8,9 +8,11 @@ public:
 	sf::CircleShape* oCircle = NULL;
 	sf::RectangleShape* oRectangle = NULL;
 	sf::Shape* oShape = NULL;
+	sf::Vector2f oPosition = { 0.f, 0.f };
 	sf::Vector2f oDirection = { 0.f, 0.f };
 	float x, y, width, height, radius;
 	sf::Color color;
+	bool wasCollidingLastFrame = false;
 
 	std::vector<GameObject*> inCollisionWith;
 
@@ -36,8 +38,8 @@ public:
 	virtual void Draw(sf::RenderWindow& window);
 	void Move(float dt);
 	void CheckWindowCollision(const sf::RenderWindow& window);
-	void CheckCollision(GameObject* object);
-	virtual void OnCollisionEnter(float depthX, float depthY);
+	void CheckCollisions(const GameObject& goOther);
+	virtual void OnCollisionEnter(std::string oFace);
 	virtual void OnCollisionStay();
 	virtual void OnCollisionExit();
 

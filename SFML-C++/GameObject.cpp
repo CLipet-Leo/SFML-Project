@@ -150,7 +150,7 @@ void GameObject::Draw(sf::RenderWindow& window)
 void GameObject::Move(float fDeltaTime)
 {
 
-	sf::Vector2f oPosition = GetPosition();
+	oPosition = GetPosition();
 	oPosition.x += (oDirection.x * 100) * fDeltaTime;
 	oPosition.y += (oDirection.y * 100) * fDeltaTime;
 	//cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
@@ -166,98 +166,92 @@ void GameObject::CheckWindowCollision(const sf::RenderWindow& window) {
 	float windowHeight = static_cast<float>(window.getSize().y);
 
 	// Vérifie la collision avec les bords de la fenêtre
-	if (position.x < 0 || position.x > windowWidth || position.y < 0 || position.y > windowHeight) {
-		OnCollisionEnter(0, 0); // Collision détectée, appelle la fonction d'entrée en collision
+	if (position.x < 0) {
+		OnCollisionEnter("gauche"); // Collision détectée, appelle la fonction d'entrée en collision
+	}
+	else if (position.x > windowWidth) {
+		OnCollisionEnter("droite"); // Collision détectée, appelle la fonction d'entrée en collision
+	}
+	else if (position.y < 0) {
+		OnCollisionEnter("haut"); // Collision détectée, appelle la fonction d'entrée en collision
+	}
+	else if (position.y > windowHeight) {
+		OnCollisionEnter("bas"); // Collision détectée, appelle la fonction d'entrée en collision
 	}
 	else {
 		OnCollisionExit(); // Pas de collision, appelle la fonction de sortie de collision
 	}
 }
 
-void GameObject::CheckCollision(GameObject* object) {
-	// Most of this stuff would probably be good to keep stored inside the player
-	// along side their x and y position. That way it doesn't have to be recalculated
-	// every collision check
-	printf("bloup\n");
-	float objectWhoCollisionHalfW = this->width / 2;
-	float objectWhoCollisionHalfH = this->height / 2;
-	float objectBeCollisionedHalfW = object->width / 2;
-	float objectBeCollisionedHalfH = object->height / 2;
+void GameObject::CheckCollisions(const GameObject& goOther) {
+	// Vérification de la collision AABB
 	sf::Vector2f positionVectW = GetPosition();
-	sf::Vector2f positionVectB = object->GetPosition();
-	float objectWhoCollisionCenterX = positionVectW.x;
-	float objectWhoCollisionCenterY = positionVectW.y;
-	float objectBeCollisionedCenterX = positionVectB.x;
-	float objectBeCollisionedCenterY = positionVectB.y;
+	sf::Vector2f positionVectB = goOther.oPosition;
+	// Calcul des coordonnées des bords du rectangle actuel
+	float thisLeft = positionVectW.x - (width / 2);
+	float thisRight = positionVectW.x + (width / 2);
+	float thisTop = positionVectW.y - (height / 2);
+	float thisBottom = positionVectW.y + (height / 2);
 
-	// Calculate the distance between centers
-	float diffX = objectBeCollisionedCenterX - objectWhoCollisionCenterX;
-	float diffY = objectBeCollisionedCenterY - objectWhoCollisionCenterY;
-	//cout << "diff: " << diffX << "||" << diffY << endl;
+	// Calcul des coordonnées des bords du rectangle 'other'
+	float otherLeft = positionVectB.x - (goOther.width / 2);
+	float otherRight = positionVectB.x + (goOther.width / 2);
+	float otherTop = positionVectB.y - (goOther.height / 2);
+	float otherBottom = positionVectB.y + (goOther.height / 2);
 
-	// Calculate the minimum distance to separate along X and Y
-	float minXDist = objectWhoCollisionHalfW + objectBeCollisionedHalfW;
-	float minYDist = objectWhoCollisionHalfH + objectBeCollisionedHalfH;
-	//cout << "min: " << minXDist << "||" << minYDist << endl;
-
-	// Calculate the depth of collision for both the X and Y axis
-	float depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
-	float depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
-	//cout << "depth: " << depthX << "||" << depthY << endl;
-
-	// Now that you have the depth, you can pick the smaller depth and move
-	// along that axis.
-
-	bool IsCollidingX = objectWhoCollisionCenterX < objectBeCollisionedCenterX + object->width && objectWhoCollisionCenterX + this->width > objectBeCollisionedCenterX;
-    bool IsCollidingY = objectWhoCollisionCenterY < objectBeCollisionedCenterY + object->height && objectWhoCollisionCenterY + this->height > objectBeCollisionedCenterY;
-
-	bool isInCollision = IsCollidingX && IsCollidingY;
-	auto it = std::find(inCollisionWith.begin(), inCollisionWith.end(), object);
-	bool isAlreadyInCollision = it != inCollisionWith.end();
-
-	cout << isAlreadyInCollision << "||" << isInCollision << endl;
+	// Vérifie s'il y a collision
+	bool collisionX = thisRight >= otherLeft && thisLeft <= otherRight;
+	bool collisionY = thisBottom >= otherTop && thisTop <= otherBottom;
 
 
-	if (isInCollision)
-	{
-		if (isAlreadyInCollision)
+	if (collisionX || collisionY) {
+		std::string face;
+		// Vérifie la face de collision de la AABB
+		if (collisionX && thisRight >= otherLeft)
 		{
-			printf("enter the stay\n");
+			face = "droite";
+		}
+		else if (collisionX && thisLeft <= otherRight)
+		{
+			face = "gauche";
+		}
+		if (collisionY && thisBottom >= otherTop)
+		{
+			face = "bas";
+		}
+		else if (collisionY && thisTop <= otherBottom)
+		{
+			face = "haut";
+		}
+
+		// Appel de méthodes virtuelles selon l'état de la collision précédente
+		if (!wasCollidingLastFrame) {
+			OnCollisionEnter(face);
+		}
+		else {
 			OnCollisionStay();
 		}
-		else
-		{
-			printf("enter the enter\n");
-			inCollisionWith.push_back(object);	
-			OnCollisionEnter(depthX, depthY);
-		}
-	}
-	else
-	{
-		if (isAlreadyInCollision)
-		{
-			printf("enter the exit\n");
-			OnCollisionExit();
-			std::remove(inCollisionWith.begin(), inCollisionWith.end(), object);
-		}
-	}
 
+		wasCollidingLastFrame = true; // Indique la collision actuelle pour le prochain tour de boucle
+	}
+	else {
+		// Appel de la méthode virtuelle de sortie de collision s'il y avait collision précédemment
+		if (wasCollidingLastFrame) {
+			OnCollisionExit();
+		}
+
+		wasCollidingLastFrame = false; // Indique qu'il n'y a pas de collision pour le prochain tour de boucle
+	}
 }
 
 //--------------------------------------------------------------ON COLLISION ENTER--------------------------------------------------------------//
-void GameObject::OnCollisionEnter(float depthX, float depthY)
-{
-  
-}
+void GameObject::OnCollisionEnter(std::string oFace)
+{}
 
 //--------------------------------------------------------------ON COLLISION STAY---------------------------------------------------------------//
 void GameObject::OnCollisionStay()
-{
-
-}
+{}
 
 //--------------------------------------------------------------ON COLLISION EXIT---------------------------------------------------------------//
 void GameObject::OnCollisionExit()
-{
-
-}
+{}

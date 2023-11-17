@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Canon.h"
 #include "CanonBall.h"
+#include "Brick.h"
 
 class GameManager
 {
@@ -17,6 +18,7 @@ public:
 	sf::Vector2i clicPos;
 
 	std::vector<CanonBall*> oBullet;
+	std::vector<Brick*> oBricks;
 
 	GameManager(int width = 400, int height = 400);
 	~GameManager();
