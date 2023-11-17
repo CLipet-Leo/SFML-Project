@@ -33,8 +33,9 @@ public:
 	sf::Vector2f GetOriginRelativeToWindow();
 
 	//---------------------------------------EVENT----------------------------------------//
-	void Draw(sf::RenderWindow& window);
+	virtual void Draw(sf::RenderWindow& window);
 	void Move(float dt);
+	void CheckWindowCollision(const sf::RenderWindow& window);
 	void CheckCollision(GameObject* object);
 	virtual void OnCollisionEnter(float depthX, float depthY);
 	virtual void OnCollisionStay();

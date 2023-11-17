@@ -81,6 +81,9 @@ void GameObject::SetRotation(sf::Vector2i& oOrientationPosition, float fRatioX, 
 
 	float fAngleDegree = Math::VectorToAngle(fOrientationPosition, oOriginPositionInWindow);
 
+	sf::Vector2f oVectDirection = Math::DirectionBetweenPoints(oOriginPositionInWindow, fOrientationPosition);
+	SetDirection(oVectDirection.x, oVectDirection.y);
+
 	SetRotation(fAngleDegree, fRatioX, fRatioY);
 }
 
@@ -148,13 +151,29 @@ void GameObject::Move(float fDeltaTime)
 {
 
 	sf::Vector2f oPosition = GetPosition();
-	oPosition.x += (oDirection.x * 200) * fDeltaTime;
-	oPosition.y += (oDirection.y * 200) * fDeltaTime;
+	oPosition.x += (oDirection.x * 100) * fDeltaTime;
+	oPosition.y += (oDirection.y * 100) * fDeltaTime;
 	//cout << "Nouvelle pos : " << oOriginVect.x << "," << oOriginVect.y << std::endl;
 	SetPosition(oPosition.x, oPosition.y);
 }
 
 //--------------------------------------------------------------CHECK COLLISION-----------------------------------------------------------------//
+void GameObject::CheckWindowCollision(const sf::RenderWindow& window) {
+	sf::Vector2f position = GetPosition();
+
+	// Récupère les dimensions de la fenêtre
+	float windowWidth = static_cast<float>(window.getSize().x);
+	float windowHeight = static_cast<float>(window.getSize().y);
+
+	// Vérifie la collision avec les bords de la fenêtre
+	if (position.x < 0 || position.x > windowWidth || position.y < 0 || position.y > windowHeight) {
+		OnCollisionEnter(0, 0); // Collision détectée, appelle la fonction d'entrée en collision
+	}
+	else {
+		OnCollisionExit(); // Pas de collision, appelle la fonction de sortie de collision
+	}
+}
+
 void GameObject::CheckCollision(GameObject* object) {
 	// Most of this stuff would probably be good to keep stored inside the player
 	// along side their x and y position. That way it doesn't have to be recalculated
