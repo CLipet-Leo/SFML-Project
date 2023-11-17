@@ -11,8 +11,7 @@ using namespace std;
 Canon::Canon(float x, float y, sf::Color color, float width, float height)
 	: GameObject(x, y, color, width, height)
 {
-	cout << "Created !!!" << endl;
-
+	//cout << "Created !!!" << endl;
 }
 
 Canon::~Canon()

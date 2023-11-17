@@ -55,14 +55,14 @@ void GameManager::GameLoop()
         {
             canon.Shoot(oBullet);
         }
+
+        //----------------------------------------UPDATE----------------------------------------//
         if (oBullet.size() != 0)
         {
             for (int i = 0; i < oBullet.size(); i++) {
                 oBullet.at(i)->Move(deltaTime);
             }
         }
-
-        //----------------------------------------UPDATE----------------------------------------//
         //rectangleBlue->GetPosition();
         //rectangleRed->GetPosition();
 
@@ -98,8 +98,6 @@ void GameManager::GameLoop()
         //rectangleBlue->Move(deltaTime);
         //rectangleBlue->CheckCollision(rectangleRed);
         
-
-
         //----------------------------------------DRAW------------------------------------------//
         oWindow->clear();
       
@@ -108,6 +106,7 @@ void GameManager::GameLoop()
         {
             for (int i = 0; i < oBullet.size(); i++) {
                 sf::Vector2f position = oBullet.at(i)->GetPosition();
+                //oWindow->draw(oBullet.at(i));
                 oBullet.at(i)->Draw(*oWindow);
                 cout << position.x << ", " << position.y << endl;
             }
